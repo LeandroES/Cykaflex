@@ -1,0 +1,27 @@
+% Comentario sobre el documento
+clasedocumento[11pt]{libro}
+
+inicio{documento}
+
+% Título del libro:
+titulopagina[negrita]{"Breve Introducción a Cykaflex"}
+
+% Capítulo único:
+capitulo["Capítulo Único"] {
+    % Introducción al capítulo:
+    texto{"Este es un ejemplo muy simple de cómo se puede estructurar un libro con Cykaflex."}
+
+    % Sección dentro del capítulo:
+    seccion["Propósito de Cykaflex"]{
+        % Descripción del propósito:
+        texto{"Cykaflex es una herramienta diseñada para simplificar la creación de documentos estructurados, proporcionando claridad y consistencia en la presentación."}
+    }
+
+    % Subsección para detalles adicionales:
+    subseccion["Facilidad de Uso"]{
+        % Explicación de la facilidad de uso:
+        texto{"La facilidad de uso es uno de los principales beneficios de Cykaflex, permitiendo a los usuarios concentrarse en el contenido más que en la forma."}
+    }
+}
+
+fin{documento}

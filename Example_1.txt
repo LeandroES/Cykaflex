@@ -1,0 +1,32 @@
+% Comentario inicial describiendo el documento
+clasedocumento[12pt]{libro}
+inicio{documento}
+% Título del libro:
+titulopagina[negrita]{"La Ciencia de Cykaflex"}
+% Primer capítulo:
+capitulo["Introducción"] {
+    texto{"Este capítulo introduce los conceptos básicos y la importancia de Cykaflex en la documentación moderna."}
+    seccion["Historia"]{
+        texto{"Cykaflex fue desarrollado en el año 2024, con el objetivo de simplificar la creación de documentos estructurados."}
+        subseccion["Evolución"]{
+            texto{"Inicialmente, Cykaflex comenzó como un proyecto pequeño y se ha convertido en una herramienta esencial para muchos profesionales."}
+        }
+    }
+}
+% Segundo capítulo:
+capitulo["Aplicaciones Prácticas"] {
+    texto{"Este capítulo describe las diversas aplicaciones de Cykaflex en diferentes campos."}
+    seccion["Educación"]{
+        texto{"En el ámbito educativo, Cykaflex facilita la organización de apuntes y material didáctico."}
+        subseccion["Casos de Uso"]{
+            texto{"Profesores y estudiantes utilizan Cykaflex para estructurar sus cursos y trabajos de investigación."}
+        }
+    }
+    seccion["Industria"]{
+        texto{"En la industria, Cykaflex se aplica en la documentación técnica y manuales de operación."}
+        subseccion["Beneficios"]{
+            texto{"La claridad y estructura de Cykaflex ayudan a mejorar la comunicación técnica y reducir errores en la interpretación de manuales."}
+        }
+    }
+}
+fin{documento}

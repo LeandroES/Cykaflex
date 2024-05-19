@@ -1,0 +1,27 @@
+documento -> clasedocumento iniciodocumento contenidodocumento findocumento
+clasedocumento -> DOCUMENTCLASS LEFT_BRACKET NUMBER metrics RIGHT_BRACKET LEFT_KEY document_type RIGHT_KEY
+metrics -> POINT | CENTIMETER
+iniciodocumento -> INICIO LEFT_KEY DOCUMENT RIGHT_KEY
+findocumento -> FIN LEFT_KEY DOCUMENT RIGHT_KEY
+contenidodocumento -> elemento contenidodocumento | ''
+elemento -> comentario | titulo | seccion | subseccion | subsubseccion | lista | NEWPAGE | texto | chapter
+contenidodocumentoseccion -> elementos contenidodocumentoseccion | ''
+elementos -> comentario | titulo | subseccion | lista | NEWPAGE | texto | chapter
+contenidodocumentosubseccion -> elementoss contenidodocumentosubseccion | ''
+elementoss -> comentario | titulo | subsubseccion | lista | NEWPAGE | texto | chapter
+contenidodocumentosubsubseccion -> elementosss contenidodocumentosubsubseccion | ''
+elementosss -> comentario | titulo | lista | NEWPAGE | texto | chapter
+comentario -> COMMENT LEFT_KEY CONTENT RIGHT_KEY
+titulo -> TITULOPAGINA LEFT_BRACKET styles RIGHT_BRACKET LEFT_KEY CONTENT RIGHT_KEY
+styles -> NEGRITA | CURSIVA
+texto -> TEXTO LEFT_KEY CONTENT RIGHT_KEY
+seccion -> SECCION LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumentoseccion RIGHT_KEY
+subseccion -> SUBSECCION LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumentosubseccion RIGHT_KEY
+subsubseccion -> SUBSUBSECCION LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumentosubsubseccion RIGHT_KEY
+lista -> enumerar | itemizar
+enumerar -> INICIOE LEFT_BRACKET ENUMERAR RIGHT_BRACKET LEFT_KEY items RIGHT_KEY
+itemizar -> INICIOI LEFT_BRACKET ITEMIZAR RIGHT_BRACKET LEFT_KEY items RIGHT_KEY
+items -> item items | ''
+item -> ITEM LEFT_KEY CONTENT RIGHT_KEY
+chapter -> CHAPTER LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumento RIGHT_KEY
+document_type -> ARTICLE | BOOK
