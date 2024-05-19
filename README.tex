@@ -1,0 +1,397 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{pdflscape}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+
+\newcommand{\sectionbreak}{\clearpage}
+\DeclareGraphicsExtensions{.bmp,.png,.pdf,.jpg}
+\usepackage{gensymb}
+
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\setmarginsrb{2 cm}{1 cm}{2 cm}{1 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\usepackage[spanish]{babel}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\hypersetup{
+    colorlinks=true,% make the links colored
+}
+\usepackage[nolist]{acronym}
+\usepackage[table]{xcolor}
+\usepackage{url}
+
+\addto\captionsspanish{\renewcommand{\refname}{Bibliografía}}
+
+\begin{document}
+\begin{titlepage}
+
+\title{     \textbf{Cykaflex}\\[2.5ex]
+\textit{Un sistema de software simplificado
+para la composición de documentos.} }
+
+\author{    
+             \textbf{Docente:} Ph.D. Vicente Enrique Machaca Arceda \\[2.5ex]
+             \textbf{Carrera:} Ingeniería de Software \\[2.5ex]
+             \textbf{Curso:} Compiladores \\[2.5ex]
+             \textbf{Discente:} \\[2.5ex]  
+             Leandro Igor Estrada Santos, \\ \texttt{ lestradas@ulasalle.edu.pe } \\[2.5ex]
+                                                       \\[2.5ex]
+            \normalsize{Facultad de Ingeniería, Universidad La Salle - Arequipa}        \\ 
+       }
+\date{}
+
+\end{titlepage}
+
+\maketitle
+\thispagestyle{empty} 
+
+
+{
+  \hypersetup{linkcolor=black}
+  \tableofcontents
+}
+
+%##########################
+% Abs
+%##########################
+
+\section{Introducción}
+\indent
+\begin{enumerate}
+    \item Justificación
+        \begin{enumerate}
+            \item Debido a que multiples docentes del área de educación escolar no tienen un estandar para la elaboración de informes, separatas de trabajo semanal, y demás artefactos de carácter importante. Asimismo muchos no cuentan con una licencia de Office 365 y muchos consideran muy complicada la interfaz de Office 365. o hasta incluso hay quienes no saben cómo usar Office 365.
+        \end{enumerate}
+    \item Objetivo
+        \begin{enumerate}
+            \item Crear una versión de LaTeX en español y su respectivo compilador.
+        \end{enumerate}
+\end{enumerate}
+\subsection{Propuesta}
+\indent 
+\begin{enumerate}
+    \item Para que la relación con LaTeX, para los usuarios de habla hispana que no dominan el inglés, sea más interactiva, menos dramática y así, poco a poco se pueda incorporar este lenguaje de marcas tan rico, sobrio y minimalista que se encarga de la composición tipográfica y la representación. Cykaflex, propone una alternativa rápida y formal, para aquellos quienes consideran LaTeX un dilema. De esta manera, los futuros usuarios puedan ampliarse arbitrariamente utilizando el lenguaje de macros subyacente para desarrollar macros personalizadas, como nuevos entornos y comandos. Y lo mejor de todo esto es que uno podrá hacerlo en español.
+\end{enumerate}
+\sectionbreak
+\section{Especificación Léxica}
+\indent
+\begin{enumerate}
+    \item Definición de los comentarios 
+        \begin{itemize}
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Comentarios en Cykaflex} \\
+            \hline  Token& Significado\\ 
+            \hline
+            \%   & Este símbolo será usado para denotar comentarios en Cykaflex\\
+            \hline
+            \end{tabular}
+        \end{itemize}
+    \item Definición de las keywords
+        \begin{itemize}
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Keywords en Cykaflex} \\
+            \hline Keyword& Significado\\
+            \hline cm & Se refiere a una medida en centímetros, utilizada para el diseño o formato del documento.\\
+            \hline pt & Representa una medida en puntos, utilizada en tipografía y diseño de páginas.\\
+            \hline item & Indica un elemento en una lista o enumeración.\\
+            \hline inicio & Marca el comienzo de un bloque o sección de código en Cykaflex.\\
+            \hline fin & Marca el final de un bloque o sección de código en Cykaflex.\\
+            \hline documento & Indica la estructura principal del documento Cykaflex.\\
+            \hline titulopagina & Se refiere al título o encabezado principal del documento.\\
+            \hline ennumerar & Indica la creación de una lista numerada.\\
+            \hline itemizar & Indica la creación de una lista de elementos sin numerar.\\
+            \hline inicioe & Indica la inicialización del comando enumerar. \\
+            \hline inicioi & Indica la inicialización del comando itemizar. \\
+            \hline negrita & Aplica un estilo de texto en negrita.\\
+            \hline cursiva & Aplica un estilo de texto en cursiva o itálica.\\
+            \hline seccion & Define una sección principal dentro del documento.\\
+            \hline subseccion & Define una subsección dentro de una sección principal.\\
+            \hline subsubseccion & Define una subsección de nivel inferior dentro de una sección o subsección.\\
+            \hline negrita & Aplica un estilo de texto en negrita.\\
+            \hline
+            \end{tabular}
+        
+            \newpage
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Keywords en Cykaflex} \\
+            \hline  Keyword& Significado\\ 
+            \hline cursiva & Aplica un estilo de texto en cursiva o itálica.\\
+            \hline seccion & Define una sección principal dentro del documento.\\
+            \hline subseccion & Define una subsección dentro de una sección principal.\\
+            \hline subsubseccion & Define una subsección de nivel inferior dentro de una sección o subsección.\\
+            \hline nuevapagina & Indica la inserción de una nueva página en el documento.\\
+            \hline clasedocumento & Define la clase o tipo de documento en Cykaflex, similar al concepto de "documento" pero con especificaciones adicionales.\\
+            \hline articulo & Especifica que el documento Cykaflex será un artículo.\\
+            \hline libro & Especifica que el documento Cykaflex será un libro. \\
+            \hline capitulo & Esta palabra clave indica que se va a inicializar un capítulo. \\
+            \hline
+            \end{tabular}
+        \end{itemize}
+    \item Definición de los literales
+        \begin{itemize}
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Literales en Cykaflex} \\
+            \hline  Token& Significado\\ 
+            \hline
+            \%   & Este símbolo será usado para denotar comentarios en Cykaflex\\
+            \hline
+            \end{tabular}
+        \end{itemize}
+    \item Definición de los operadores
+        \begin{itemize}
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Operadores en Cykaflex} \\
+            \hline  Token& Significado\\ 
+            \hline
+            \multicolumn{2}{|c|}{No hay operadores en Cykaflex.}\\
+            \hline
+            \end{tabular}
+        \end{itemize}
+\end{enumerate}
+\sectionbreak
+\subsection{Expresiones Regulares}
+\begin{enumerate}
+    \item Expresión regular de cada componente léxico
+        \begin{itemize}
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Expresiones Regulares} \\
+            \hline  Token& Significado\\ 
+            \hline
+            \hline RIGHT\_KEY & \begin{verbatim}t_RIGHT_KEY = r'{'\end{verbatim} \\
+            \hline LEFT\_KEY & \begin{verbatim}t_LEFT_KEY = r'}'\end{verbatim} \\
+            \hline RIGHT\_BRACKET & \begin{verbatim}t_RIGHT_BRACKET = r']'\end{verbatim} \\
+            \hline LEFT\_BRACKET & \begin{verbatim}t_LEFT_BRACKET = r'['\end{verbatim} \\
+            \hline CONTENT & \begin{verbatim}t_CONTENT = r'".+"'\end{verbatim} \\
+            \hline TEXTO & \begin{verbatim}t_TEXTO = r'texto'\end{verbatim} \\
+            \hline CENTIMETER & \begin{verbatim}t_CENTIMETER = r'cm'\end{verbatim} \\
+            \hline POINT & \begin{verbatim}t_POINT = r'pt'\end{verbatim} \\
+            \hline NUMBER & \begin{verbatim}t_NUMBER = r'[0-9]+'\end{verbatim} \\
+            \hline ITEM & \begin{verbatim}t_ITEM = r'item'\end{verbatim} \\
+            \hline INICIO & \begin{verbatim}t_INICIO = r'inicio'\end{verbatim} \\
+            \hline FIN & \begin{verbatim}t_FIN = r'fin'\end{verbatim} \\
+            \hline DOCUMENTO & \begin{verbatim}t_DOCUMENTO = r'documento'\end{verbatim} \\
+            \hline TITULOPAGINA & \begin{verbatim}t_TITULOPAGINA = r'titulopagina'\end{verbatim} \\
+            \hline INICIOE & \begin{verbatim}t_INICIOE = r'inicioe'\end{verbatim} \\
+            \hline INICIOI & \begin{verbatim}t_INICIOI = r'inicioi'\end{verbatim} \\
+            \hline
+            \end{tabular}
+        \end{itemize}
+        \begin{itemize}
+            \item \begin{tabular}{ |p{6cm}||p{8cm}|p{3cm}|p{3cm}|  }
+            \hline
+            \multicolumn{2}{|c|}{Expresiones Regulares} \\
+            \hline  Token& Significado\\ 
+            \hline
+            \hline ENUMERAR & \begin{verbatim}t_ENUMERAR = r'ennumerar'\end{verbatim} \\
+            \hline ITEMIZAR & \begin{verbatim}t_ITEMIZAR = r'itemizar'\end{verbatim} \\
+            \hline NEGRITA & \begin{verbatim}t_NEGRITA = r'negrita'\end{verbatim} \\
+            \hline CURSIVA & \begin{verbatim}t_CURSIVA = r'cursiva'\end{verbatim} \\
+            \hline SECCION & \begin{verbatim}t_SECCION = r'seccion'\end{verbatim} \\
+            \hline SUBSECCION & \begin{verbatim}t_SUBSECCION = r'subseccion'\end{verbatim} \\
+            \hline SUBSUBSECCION & \begin{verbatim}t_SUBSUBSECCION = r'subsubseccion'\end{verbatim} \\
+            \hline CHAPTER & \begin{verbatim}t_CHAPTER = r'capitulo'\end{verbatim} \\
+            \hline NEWPAGE & \begin{verbatim}t_NEWPAGE = r'nuevapagina'\end{verbatim} \\
+            \hline DOCUMENTCLASS & \begin{verbatim}t_DOCUMENTCLASS = r'clasedocumento'\end{verbatim} \\
+            \hline ARTICLE & \begin{verbatim}t_ARTICLE = r'articulo'\end{verbatim} \\
+            \hline BOOK & \begin{verbatim}t_BOOK = r'libro'\end{verbatim} \\
+            \hline COMMENT & \begin{verbatim}t_COMMENT = r'%.+'\end{verbatim} \\
+            \hline 
+            \end{tabular}
+        \end{itemize}
+\end{enumerate}
+\newpage
+\sectionbreak
+\begin{landscape}
+\section{Gramática}
+\begin{center}
+        \begin{verbatim}
+documento -> clasedocumento iniciodocumento contenidodocumento findocumento
+clasedocumento -> DOCUMENTCLASS LEFT_BRACKET NUMBER metrics RIGHT_BRACKET LEFT_KEY document_type RIGHT_KEY
+metrics -> POINT | CENTIMETER
+iniciodocumento -> INICIO LEFT_KEY DOCUMENT RIGHT_KEY
+findocumento -> FIN LEFT_KEY DOCUMENT RIGHT_KEY
+contenidodocumento -> elemento contenidodocumento | ''
+elemento -> comentario | titulo | seccion | subseccion | subsubseccion | lista | NEWPAGE | texto | chapter
+contenidodocumentoseccion -> elementos contenidodocumentoseccion | ''
+elementos -> comentario | titulo | subseccion | lista | NEWPAGE | texto | chapter
+contenidodocumentosubseccion -> elementoss contenidodocumentosubseccion | ''
+elementoss -> comentario | titulo | subsubseccion | lista | NEWPAGE | texto | chapter
+contenidodocumentosubsubseccion -> elementosss contenidodocumentosubsubseccion | ''
+elementosss -> comentario | titulo | lista | NEWPAGE | texto | chapter
+comentario -> COMMENT LEFT_KEY CONTENT RIGHT_KEY
+titulo -> TITULOPAGINA LEFT_BRACKET styles RIGHT_BRACKET LEFT_KEY CONTENT RIGHT_KEY
+styles -> NEGRITA | CURSIVA
+texto -> TEXTO LEFT_KEY CONTENT RIGHT_KEY
+seccion -> SECCION LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumentoseccion RIGHT_KEY
+subseccion -> SUBSECCION LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumentosubseccion RIGHT_KEY
+subsubseccion -> SUBSUBSECCION LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumentosubsubseccion RIGHT_KEY
+lista -> enumerar | itemizar
+enumerar -> INICIOE LEFT_BRACKET ENUMERAR RIGHT_BRACKET LEFT_KEY items RIGHT_KEY
+itemizar -> INICIOI LEFT_BRACKET ITEMIZAR RIGHT_BRACKET LEFT_KEY items RIGHT_KEY
+items -> item items | ''
+item -> ITEM LEFT_KEY CONTENT RIGHT_KEY
+chapter -> CHAPTER LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumento RIGHT_KEY
+document_type -> ARTICLE | BOOK
+
+
+        \end{verbatim}
+        \end{center}
+        
+\end{landscape}
+\section{1er Ejemplo de Código}
+        \begin{center}
+        \begin{verbatim}
+clasedocumento[12pt]{libro}
+inicio{documento}
+% Título del libro:
+titulopagina[negrita]{"La Ciencia de Cykaflex"}
+% Primer capítulo:
+capitulo["Introducción"] {
+    texto{"Este capítulo introduce los conceptos básicos y 
+    la importancia de Cykaflex en la documentación moderna."}
+    seccion["Historia"]{
+        texto{"Cykaflex fue desarrollado en el año 2024, con el objetivo 
+        de simplificar la creación de documentos estructurados."}
+        subseccion["Evolución"]{
+            texto{"Inicialmente, Cykaflex comenzó como un proyecto 
+            pequeño y se ha convertido en una herramienta esencial 
+            para muchos profesionales."}
+        }
+    }
+}
+% Segundo capítulo:
+capitulo["Aplicaciones Prácticas"] {
+    texto{"Este capítulo describe las diversas aplicaciones de Cykaflex 
+    en diferentes campos."}
+    seccion["Educación"]{
+        texto{"En el ámbito educativo, Cykaflex facilita la organización de 
+        apuntes y material didáctico."}
+        subseccion["Casos de Uso"]{
+            texto{"Profesores y estudiantes utilizan Cykaflex para estructurar 
+            sus cursos y trabajos de investigación."}
+        }
+    }
+    seccion["Industria"]{
+        texto{"En la industria, Cykaflex se aplica en la 
+        documentación técnica y manuales de operación."}
+        subseccion["Beneficios"]{
+            texto{"La claridad y estructura de Cykaflex ayudan a mejorar la 
+            comunicación técnica y reducir errores en la 
+            interpretación de manuales."}
+        }
+    }
+}
+fin{documento}
+        \end{verbatim}
+        \end{center}
+\newpage
+\section{2do Ejemplo de Código}
+        \begin{center}
+        \begin{verbatim}
+% Comentario inicial
+clasedocumento[10pt]{articulo}
+inicio{documento}
+% Título del artículo:
+titulopagina[cursiva]{"Innovación en Cykaflex: Un estudio de caso"}
+% Resumen del artículo:
+seccion["Resumen"]{
+    texto{"Este artículo presenta un estudio de caso sobre la innovación 
+    y adaptabilidad de Cykaflex en la redacción científica."}
+}
+% Introducción del artículo:
+seccion["Introducción"]{
+    texto{"Cykaflex ha revolucionado la manera en que se redactan 
+    documentos científicos, ofreciendo herramientas 
+    que mejoran la eficiencia y la claridad."}
+}
+% Metodología empleada en el estudio:
+seccion["Metodología"]{
+    texto{"Se analizó el uso de Cykaflex en un grupo de 100 científicos 
+    durante un año para determinar su impacto en la productividad y 
+    calidad de los documentos producidos."}
+}
+% Resultados obtenidos:
+seccion["Resultados"]{
+    texto{"Los resultados indican una mejora significativa en la 
+    eficiencia de redacción y en la satisfacción de los usuarios 
+    con documentos más estructurados y claros."}
+    subseccion["Datos Estadísticos"]{
+        texto{"El 90% de los usuarios reportó una reducción en el
+        tiempo de redacción, mientras que el 85% destacó 
+        una mejora en la calidad de sus publicaciones."}
+    }
+}
+% Conclusiones del estudio:
+seccion["Conclusiones"]{
+    texto{"Cykaflex ha demostrado ser una herramienta valiosa 
+    en la redacción científica, mejorando significativamente 
+    tanto la eficiencia como la calidad de los documentos."}
+}
+fin{documento}
+        \end{verbatim}
+        \end{center}
+\section{3er Ejemplo de Código}
+        \begin{center}
+        \begin{verbatim}
+        
+% Comentario sobre el documento
+clasedocumento[11pt]{libro}
+
+inicio{documento}
+% Título del libro:
+titulopagina[negrita]{"Breve Introducción a Cykaflex"}
+% Capítulo único:
+capitulo["Capítulo Único"] {
+    % Introducción al capítulo:
+    texto{"Este es un ejemplo muy simple de cómo se puede 
+    estructurar un libro con Cykaflex."}
+    % Sección dentro del capítulo:
+    seccion["Propósito de Cykaflex"]{
+        % Descripción del propósito:
+        texto{"Cykaflex es una herramienta diseñada para 
+        simplificar la creación de documentos estructurados, 
+        proporcionando claridad y consistencia en la presentación."}
+    }
+    % Subsección para detalles adicionales:
+    subseccion["Facilidad de Uso"]{
+        % Explicación de la facilidad de uso:
+        texto{"La facilidad de uso es uno de los principales 
+        beneficios de Cykaflex, permitiendo a los usuarios 
+        concentrarse en el contenido más que en la forma."}
+    }
+}
+fin{documento}
+        \end{verbatim}
+        \end{center}
+%\clearpage
+\section{Bibliografía}
+\begin{enumerate}
+    \item \href{https://www.giss.nasa.gov/tools/latex/ltx-2.html}{LaTeX Commands by NaSA}.
+    \item \href{https://manualdelatex.com/simbolos#chapter10}{Manual de LaTeX}.
+    \item \href{https://shop.elsevier.com/books/engineering-a-compiler/cooper/978-0-12-815412-0}{Engineering a Compiler - 3rd Edition, Keith D. Cooper, Linda Torczon}.
+    \item \href{https://tex.stackexchange.com/}{TeX - LaTeX Stack Exchange foro de la comunidad LaTeX}.
+    \item \href{https://ctan.org/}{Comprehensive TeX Archive Network}.
+\newpage
+Unix, Unicode and C++, Woz S.
+\end{enumerate}
+
+\end{document}
