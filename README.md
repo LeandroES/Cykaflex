@@ -1,17 +1,23 @@
 # Cykaflex
 
 ## Introducción
-Cykaflex es un sistema de software simplificado para la composición de documentos, diseñado como una alternativa a LaTeX en español. Su objetivo es facilitar la elaboración de documentos para usuarios que no dominan el inglés.
+
+Cykaflex es un sistema de software simplificado para la composición de documentos, diseñado como una alternativa a LaTeX
+en español. Su objetivo es facilitar la elaboración de documentos para usuarios que no dominan el inglés.
 
 ### Propuesta
-Crear una versión en español de LaTeX y su respectivo compilador, haciendo la interfaz con este sistema de marcas más interactiva y menos dramática para los usuarios hispanohablantes.
+
+Crear una versión en español de LaTeX y su respectivo compilador, haciendo la interfaz con este sistema de marcas más
+interactiva y menos dramática para los usuarios hispanohablantes.
 
 ## Especificación Léxica
 
 ### Comentarios
+
 - `%`: Este símbolo será usado para denotar comentarios en Cykaflex.
 
 ### Keywords
+
 - `cm`: Se refiere a una medida en centímetros.
 - `pt`: Representa una medida en puntos, utilizada en tipografía.
 - `inicio`: Marca el comienzo de un bloque o sección de código.
@@ -19,6 +25,7 @@ Crear una versión en español de LaTeX y su respectivo compilador, haciendo la 
 - `documento`: Indica la estructura principal del documento.
 
 ### Expresiones Regulares
+
 - `{`: `t_RIGHT_KEY = r'{'`
 - `}`: `t_LEFT_KEY = r'}'`
 - `]`: `t_RIGHT_BRACKET = r']'`
@@ -30,6 +37,7 @@ Crear una versión en español de LaTeX y su respectivo compilador, haciendo la 
 - Numeración: `t_NUMBER = r'[0-9]+'`
 
 ## Gramática
+
 - `documento -> clasedocumento iniciodocumento contenidodocumento findocumento`
 
 - `clasedocumento -> DOCUMENTCLASS LEFT_BRACKET NUMBER metrics RIGHT_BRACKET LEFT_KEY document_type RIGHT_KEY`
@@ -106,7 +114,9 @@ Crear una versión en español de LaTeX y su respectivo compilador, haciendo la 
 - `document_type -> BOOK`
 
 ## Ejemplos de Código
+
 ### Primer Ejemplo
+
 ```cykaflex
 % Comentario inicial describiendo el documento
 clasedocumento[12pt]{libro}
@@ -141,7 +151,9 @@ capitulo["Aplicaciones Prácticas"] {
 }
 fin{documento}
 ```
+
 ### Segundo Ejemplo
+
 ```cykaflex
 % Comentario inicial
 clasedocumento[10pt]{articulo}
@@ -182,7 +194,9 @@ seccion["Conclusiones"]{
 
 fin{documento}
 ```
+
 ### Tercer Ejemplo
+
 ```cykaflex
 % Comentario sobre el documento
 clasedocumento[11pt]{libro}
@@ -214,6 +228,7 @@ fin{documento}
 ```
 
 ## Bibliografía
+
 1. [LaTeX Commands by NaSA](https://www.giss.nasa.gov/tools/latex/ltx-2.html)
 2. [Manual de LaTeX](https://manualdelatex.com/simbolos#chapter10)
 3. [Engineering a Compiler - 3rd Edition, Keith D. Cooper, Linda Torczon](https://shop.elsevier.com/books/engineering-a-compiler/cooper/978-0-12-815412-0)
