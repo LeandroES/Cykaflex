@@ -212,7 +212,7 @@ def calcular_conjuntos_siguientes(reglas, conjuntos_primeros):
 
 def exportar_tabla_a_csv(tabla, nombre_archivo):
     with open(nombre_archivo, 'w', newline='') as csvfile:
-        fieldnames = ['Primeros', 'Siguientes', 'No Terminal', 'Terminal', 'Produccion']
+        fieldnames = ['No Terminal', 'Terminal', 'Produccion']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -221,12 +221,12 @@ def exportar_tabla_a_csv(tabla, nombre_archivo):
                 # Asegurar que la producción se convierte correctamente a string
                 produccion_str = ' '.join(info['produccion'])
                 # Asegurar que los conjuntos de primeros y siguientes son convertidos a string y separados por comas
-                primeros_str = ', '.join(info['primeros'])
-                siguientes_str = ', '.join(info['siguientes'])
+                #primeros_str = ', '.join(info['primeros'])
+                #siguientes_str = ', '.join(info['siguientes'])
 
                 writer.writerow({
-                    'Primeros': primeros_str,
-                    'Siguientes': siguientes_str,
+                    #'Primeros': primeros_str,
+                    #'Siguientes': siguientes_str,
                     'No Terminal': no_terminal,
                     'Terminal': terminal,
                     'Produccion': produccion_str
@@ -253,29 +253,6 @@ def imprimir_conjuntos_siguientes(conjuntos_siguientes):
         print(f'"{no_terminal}": {list(conjunto_siguiente)}')
     print()
 
-def parse_ll1(lexer, tabla_sintactica):
-    stack = ['$', 'DOCUMENTO']
-    token = lexer.token()
-    try:
-        while stack:
-            top = stack.pop()
-            current_input = token.type if token else '$'
-            if top in tokens:
-                if top == current_input:
-                    token = lexer.token()
-                else:
-                    raise Exception('Error de sintaxis')
-            else:
-                regla = tabla_sintactica[top].get(current_input)
-                if regla:
-                    for symbol in reversed(regla):
-                        if symbol != 'epsilon':
-                            stack.append(symbol)
-                else:
-                    raise Exception('Error de sintaxis')
-    except Exception as e:
-        print(str(e))
-
 
 def cargar_tabla_sintactica(filename):
     df = pd.read_csv(filename)
@@ -289,28 +266,39 @@ def cargar_tabla_sintactica(filename):
         tabla[no_terminal][terminal] = produccion
     return tabla
 
-
-
-def main():
+def lexico():
     lexer.input(data)
+    lex = []
+    lista_tokens = []
 
     while True:
         tok = lexer.token()
         if not tok:
             break
-        print(tok.type, tok.value, tok.lineno, tok.lexpos)
-    print('\n')
+        info_token = {
+            "symbol": tok.type,
+            "lexeme": tok.value,
+            "nroline": tok.lineno,
+            "col": tok.lexpos
+        }
+        lista_tokens.append(info_token)
+    nuevo_token = {"symbol": "$", "lexeme": "$", "nroline": 0, "col": 0}
+    lista_tokens.append(nuevo_token)
+    return lista_tokens
+
+def main():
+
     archivo                 = 'input.txt'
     reglas                  =   leer_gramatica(archivo)
     conjuntos_primeros      =   calcular_conjuntos_primeros(reglas)
     conjuntos_siguientes    =   calcular_conjuntos_siguientes(reglas, conjuntos_primeros)
     tabla_sintactica        =   calcular_tabla_sintactica(reglas, conjuntos_primeros, conjuntos_siguientes)
 
-    imprimir_conjuntos_primeros(conjuntos_primeros)
-    imprimir_conjuntos_siguientes(conjuntos_siguientes)
-    imprimir_tabla_sintactica(tabla_sintactica)
+    #imprimir_conjuntos_primeros(conjuntos_primeros)
+    #imprimir_conjuntos_siguientes(conjuntos_siguientes)
+    #imprimir_tabla_sintactica(tabla_sintactica)
 
     exportar_tabla_a_csv(tabla_sintactica, 'tabla_sintactica.csv')
     tabla_sintactica = cargar_tabla_sintactica('tabla_sintactica.csv')
-    parse_ll1(lexer, tabla_sintactica)
-main()
+
+#main()

@@ -1,39 +1,29 @@
 % Comentario inicial
 clasedocumento[10pt]{articulo}
-
 inicio{documento}
-
 % Título del artículo:
 titulopagina[cursiva]{"Innovación en Cykaflex: Un estudio de caso"}
-
 % Resumen del artículo:
 seccion["Resumen"]{
     texto{"Este artículo presenta un estudio de caso sobre la innovación y adaptabilidad de Cykaflex en la redacción científica."}
 }
-
 % Introducción del artículo:
 seccion["Introducción"]{
     texto{"Cykaflex ha revolucionado la manera en que se redactan documentos científicos, ofreciendo herramientas que mejoran la eficiencia y la claridad."}
 }
-
 % Metodología empleada en el estudio:
 seccion["Metodología"]{
     texto{"Se analizó el uso de Cykaflex en un grupo de 100 científicos durante un año para determinar su impacto en la productividad y calidad de los documentos producidos."}
 }
-
 % Resultados obtenidos:
 seccion["Resultados"]{
     texto{"Los resultados indican una mejora significativa en la eficiencia de redacción y en la satisfacción de los usuarios con documentos más estructurados y claros."}
-
     subseccion["Datos Estadísticos"]{
         texto{"El 90% de los usuarios reportó una reducción en el tiempo de redacción, mientras que el 85% destacó una mejora en la calidad de sus publicaciones."}
     }
 }
-
 % Conclusiones del estudio:
 seccion["Conclusiones"]{
     texto{"Cykaflex ha demostrado ser una herramienta valiosa en la redacción científica, mejorando significativamente tanto la eficiencia como la calidad de los documentos."}
 }
-
 fin{documento}
-
