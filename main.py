@@ -3,7 +3,6 @@ import ply.lex as lex
 import pandas as pd
 
 tokens = (
-
     'RIGHT_KEY',
     'LEFT_KEY',
     'RIGHT_BRACKET',
@@ -33,7 +32,6 @@ tokens = (
     'ARTICLE',
     'BOOK',
     'COMMENT'
-
 )
 
 # Regular expression rules for simple tokens
@@ -69,22 +67,18 @@ t_COMMENT = r'%.+'
 
 entrada = []
 
-
 # Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-
 # A string containing ignored characters (spaces and tabs)
 t_ignore = ' \t'
-
 
 # Error handling rule
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
-
 
 # Build the lexer
 lexer = lex.lex()
@@ -92,7 +86,6 @@ lexer = lex.lex()
 # Test it out
 with open('Example_1.txt', 'r') as file:
     data = file.read()
-
 
 def leer_gramatica(a):
     with open(a, 'r') as a:
@@ -104,10 +97,12 @@ def leer_gramatica(a):
             reglas[izquierda] = derecha
         return reglas
 
-
 def es_no_terminal(simbolo):
     return simbolo.islower()
 
+
+
+##experimental
 
 def calcular_tabla_sintactica(reglas, conjuntos_primeros, conjuntos_siguientes):
     tabla = {no_terminal: {} for no_terminal in reglas}
@@ -119,7 +114,7 @@ def calcular_tabla_sintactica(reglas, conjuntos_primeros, conjuntos_siguientes):
             for simbolo in produccion:
                 if es_no_terminal(simbolo):
                     primeros_produccion.update(conjuntos_primeros[simbolo])
-                    if '' in conjuntos_primeros[simbolo]:
+                    if 'e' in conjuntos_primeros[simbolo]:
                         puede_ser_vacia = True
                         continue
                     else:
@@ -127,19 +122,27 @@ def calcular_tabla_sintactica(reglas, conjuntos_primeros, conjuntos_siguientes):
                 else:
                     primeros_produccion.add(simbolo)
                     break
-
-            # Añadir siempre los siguientes para ver si el problema está en el condicional
+            if puede_ser_vacia:
+                primeros_produccion.add('e')
             produccion_info = {
-                'produccion': produccion,
+                'produccion': produccion if produccion != [''] else ['e'],
                 'primeros': {terminal for terminal in primeros_produccion if terminal},
                 'siguientes': conjuntos_siguientes[no_terminal]
             }
 
             for terminal in primeros_produccion:
-                if terminal != '':
+                if terminal == '':
                     tabla[no_terminal][terminal] = produccion_info
-
+            if puede_ser_vacia:
+                for terminal in conjuntos_siguientes[no_terminal]:
+                    tabla[no_terminal][terminal] = {
+                        'produccion': ['e'],
+                        'primeros': {'e'},
+                        'siguientes': conjuntos_siguientes[no_terminal]
+                    }
     return tabla
+
+
 
 def calcular_conjuntos_primeros(reglas):
     conjuntos_primeros = {clave: set() for clave in reglas}
@@ -151,11 +154,11 @@ def calcular_conjuntos_primeros(reglas):
                 produccion_vacia = True
                 for simbolo in produccion:
                     if simbolo == "''":
-                        conjuntos_primeros[no_terminal].add('')
+                        conjuntos_primeros[no_terminal].add('e')  # Aquí se maneja la producción vacía
                     elif es_no_terminal(simbolo):
                         cuenta_actual = len(conjuntos_primeros[no_terminal])
-                        conjuntos_primeros[no_terminal].update(conjuntos_primeros[simbolo] - {''})
-                        if '' not in conjuntos_primeros[simbolo]:
+                        conjuntos_primeros[no_terminal].update(conjuntos_primeros[simbolo] - {'e'})
+                        if 'e' not in conjuntos_primeros[simbolo]:
                             produccion_vacia = False
                         if cuenta_actual != len(conjuntos_primeros[no_terminal]):
                             cambio = True
@@ -168,11 +171,11 @@ def calcular_conjuntos_primeros(reglas):
                     if not produccion_vacia:
                         break
                 if produccion_vacia:
-                    if '' not in conjuntos_primeros[no_terminal]:
-                        conjuntos_primeros[no_terminal].add('')
+                    if 'e' not in conjuntos_primeros[no_terminal]:
+                        conjuntos_primeros[no_terminal].add('e')
                         cambio = True
+        print(f"First sets updated: {conjuntos_primeros}")
     return conjuntos_primeros
-
 
 def calcular_conjuntos_siguientes(reglas, conjuntos_primeros):
     conjuntos_siguientes = {clave: set() for clave in reglas}
@@ -187,28 +190,23 @@ def calcular_conjuntos_siguientes(reglas, conjuntos_primeros):
                     actual = produccion[i]
                     if es_no_terminal(actual):
                         siguiente_conjunto = set()
-                        # Caso cuando hay símbolos después del actual en la producción
                         if i + 1 < len(produccion):
                             siguiente = produccion[i + 1]
                             if es_no_terminal(siguiente):
-                                siguiente_conjunto.update(conjuntos_primeros[siguiente] - {''})
-                                if '' in conjuntos_primeros[siguiente]:
+                                siguiente_conjunto.update(conjuntos_primeros[siguiente] - {'e'})
+                                if 'e' in conjuntos_primeros[siguiente]:
                                     siguiente_conjunto.update(conjuntos_siguientes[no_terminal])
                             else:
                                 siguiente_conjunto.add(siguiente)
                         else:
-                            # Caso cuando el actual es el último en la producción
                             siguiente_conjunto.update(conjuntos_siguientes[no_terminal])
 
-                        # Actualizar conjuntos de "siguientes" del no terminal actual
                         if siguiente_conjunto:
                             antes = len(conjuntos_siguientes[actual])
                             conjuntos_siguientes[actual].update(siguiente_conjunto)
                             if antes != len(conjuntos_siguientes[actual]):
                                 cambio = True
-
     return conjuntos_siguientes
-
 
 def exportar_tabla_a_csv(tabla, nombre_archivo):
     with open(nombre_archivo, 'w', newline='') as csvfile:
@@ -218,19 +216,26 @@ def exportar_tabla_a_csv(tabla, nombre_archivo):
 
         for no_terminal, terminales in tabla.items():
             for terminal, info in terminales.items():
-                # Asegurar que la producción se convierte correctamente a string
                 produccion_str = ' '.join(info['produccion'])
-                # Asegurar que los conjuntos de primeros y siguientes son convertidos a string y separados por comas
-                #primeros_str = ', '.join(info['primeros'])
-                #siguientes_str = ', '.join(info['siguientes'])
-
+                if produccion_str == "''":
+                    produccion_str = 'e'
                 writer.writerow({
-                    #'Primeros': primeros_str,
-                    #'Siguientes': siguientes_str,
                     'No Terminal': no_terminal,
                     'Terminal': terminal,
                     'Produccion': produccion_str
                 })
+                print(no_terminal, terminal, produccion_str)
+
+        # Agregar explícitamente las producciones vacías con terminales de los conjuntos siguientes
+        for no_terminal, terminales in tabla.items():
+            if any('e' == info['produccion'] for info in terminales.values()):
+                for siguiente in terminales:
+                    if siguiente not in tabla[no_terminal]:
+                        writer.writerow({
+                            'No Terminal': no_terminal,
+                            'Terminal': siguiente,
+                            'Produccion': 'e'
+                        })
 
 def imprimir_tabla_sintactica(tabla):
     print("Tabla Sintáctica LL(1):")
@@ -246,13 +251,11 @@ def imprimir_conjuntos_primeros(conjuntos_primeros):
         print(f'"{no_terminal}": {list(conjunto_primero)}')
     print()
 
-
 def imprimir_conjuntos_siguientes(conjuntos_siguientes):
     print("Conjuntos de Siguientes:")
     for no_terminal, conjunto_siguiente in conjuntos_siguientes.items():
         print(f'"{no_terminal}": {list(conjunto_siguiente)}')
     print()
-
 
 def cargar_tabla_sintactica(filename):
     df = pd.read_csv(filename)
@@ -286,19 +289,25 @@ def lexico():
     lista_tokens.append(nuevo_token)
     return lista_tokens
 
+def imprimir_ultimo_siguiente(conjuntos_siguientes):
+    print("Último elemento del conjunto de Siguientes:")
+    for no_terminal, conjunto_siguiente in conjuntos_siguientes.items():
+        if conjunto_siguiente:
+            ultimo_elemento = list(conjunto_siguiente)[-1]
+            print(f'"{no_terminal}": {ultimo_elemento}')
+    print()
+
 def main():
+    archivo = 'input.txt'
+    reglas = leer_gramatica(archivo)
+    conjuntos_primeros = calcular_conjuntos_primeros(reglas)
+    conjuntos_siguientes = calcular_conjuntos_siguientes(reglas, conjuntos_primeros)
+    tabla_sintactica = calcular_tabla_sintactica(reglas, conjuntos_primeros, conjuntos_siguientes)
 
-    archivo                 = 'input.txt'
-    reglas                  =   leer_gramatica(archivo)
-    conjuntos_primeros      =   calcular_conjuntos_primeros(reglas)
-    conjuntos_siguientes    =   calcular_conjuntos_siguientes(reglas, conjuntos_primeros)
-    tabla_sintactica        =   calcular_tabla_sintactica(reglas, conjuntos_primeros, conjuntos_siguientes)
+    imprimir_conjuntos_siguientes(conjuntos_siguientes)  # Para verificación
+    imprimir_ultimo_siguiente(conjuntos_siguientes)  # Añadido para verificación
+    #exportar_tabla_a_csv(tabla_sintactica, 'tabla_sintactica.csv')
+    #tabla_sintactica = cargar_tabla_sintactica('tabla_sintactica.csv')
 
-    #imprimir_conjuntos_primeros(conjuntos_primeros)
-    #imprimir_conjuntos_siguientes(conjuntos_siguientes)
-    #imprimir_tabla_sintactica(tabla_sintactica)
-
-    exportar_tabla_a_csv(tabla_sintactica, 'tabla_sintactica.csv')
-    tabla_sintactica = cargar_tabla_sintactica('tabla_sintactica.csv')
-
-#main()
+if __name__ == "__main__":
+    main()

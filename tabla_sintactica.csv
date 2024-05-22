@@ -5,17 +5,17 @@ metrics,POINT,POINT
 metrics,CENTIMETER,CENTIMETER
 iniciodocumento,INICIO,INICIO LEFT_KEY DOCUMENT RIGHT_KEY
 findocumento,FIN,FIN LEFT_KEY DOCUMENT RIGHT_KEY
-contenidodocumento,INICIOI,elemento contenidodocumento
-contenidodocumento,SUBSECCION,elemento contenidodocumento
-contenidodocumento,INICIOE,elemento contenidodocumento
-contenidodocumento,TITULOPAGINA,elemento contenidodocumento
-contenidodocumento,NEWPAGE,elemento contenidodocumento
 contenidodocumento,CHAPTER,elemento contenidodocumento
-contenidodocumento,SECCION,elemento contenidodocumento
-contenidodocumento,TEXTO,elemento contenidodocumento
-contenidodocumento,SUBSUBSECCION,elemento contenidodocumento
+contenidodocumento,INICIOE,elemento contenidodocumento
 contenidodocumento,COMMENT,elemento contenidodocumento
-contenidodocumento,'',''
+contenidodocumento,TEXTO,elemento contenidodocumento
+contenidodocumento,NEWPAGE,elemento contenidodocumento
+contenidodocumento,SECCION,elemento contenidodocumento
+contenidodocumento,INICIOI,elemento contenidodocumento
+contenidodocumento,SUBSUBSECCION,elemento contenidodocumento
+contenidodocumento,SUBSECCION,elemento contenidodocumento
+contenidodocumento,TITULOPAGINA,elemento contenidodocumento
+contenidodocumento,'',e
 elemento,COMMENT,comentario
 elemento,TITULOPAGINA,titulo
 elemento,SECCION,seccion
@@ -26,15 +26,15 @@ elemento,INICIOE,lista
 elemento,NEWPAGE,NEWPAGE
 elemento,TEXTO,texto
 elemento,CHAPTER,chapter
+contenidodocumentoseccion,CHAPTER,elementos contenidodocumentoseccion
+contenidodocumentoseccion,INICIOE,elementos contenidodocumentoseccion
+contenidodocumentoseccion,COMMENT,elementos contenidodocumentoseccion
+contenidodocumentoseccion,TEXTO,elementos contenidodocumentoseccion
+contenidodocumentoseccion,NEWPAGE,elementos contenidodocumentoseccion
 contenidodocumentoseccion,INICIOI,elementos contenidodocumentoseccion
 contenidodocumentoseccion,SUBSECCION,elementos contenidodocumentoseccion
-contenidodocumentoseccion,INICIOE,elementos contenidodocumentoseccion
 contenidodocumentoseccion,TITULOPAGINA,elementos contenidodocumentoseccion
-contenidodocumentoseccion,NEWPAGE,elementos contenidodocumentoseccion
-contenidodocumentoseccion,CHAPTER,elementos contenidodocumentoseccion
-contenidodocumentoseccion,TEXTO,elementos contenidodocumentoseccion
-contenidodocumentoseccion,COMMENT,elementos contenidodocumentoseccion
-contenidodocumentoseccion,'',''
+contenidodocumentoseccion,'',e
 elementos,COMMENT,comentario
 elementos,TITULOPAGINA,titulo
 elementos,SUBSECCION,subseccion
@@ -43,15 +43,15 @@ elementos,INICIOE,lista
 elementos,NEWPAGE,NEWPAGE
 elementos,TEXTO,texto
 elementos,CHAPTER,chapter
-contenidodocumentosubseccion,INICIOI,elementoss contenidodocumentosubseccion
-contenidodocumentosubseccion,INICIOE,elementoss contenidodocumentosubseccion
-contenidodocumentosubseccion,TITULOPAGINA,elementoss contenidodocumentosubseccion
-contenidodocumentosubseccion,NEWPAGE,elementoss contenidodocumentosubseccion
 contenidodocumentosubseccion,CHAPTER,elementoss contenidodocumentosubseccion
-contenidodocumentosubseccion,TEXTO,elementoss contenidodocumentosubseccion
-contenidodocumentosubseccion,SUBSUBSECCION,elementoss contenidodocumentosubseccion
+contenidodocumentosubseccion,INICIOE,elementoss contenidodocumentosubseccion
 contenidodocumentosubseccion,COMMENT,elementoss contenidodocumentosubseccion
-contenidodocumentosubseccion,'',''
+contenidodocumentosubseccion,TEXTO,elementoss contenidodocumentosubseccion
+contenidodocumentosubseccion,NEWPAGE,elementoss contenidodocumentosubseccion
+contenidodocumentosubseccion,INICIOI,elementoss contenidodocumentosubseccion
+contenidodocumentosubseccion,SUBSUBSECCION,elementoss contenidodocumentosubseccion
+contenidodocumentosubseccion,TITULOPAGINA,elementoss contenidodocumentosubseccion
+contenidodocumentosubseccion,'',e
 elementoss,COMMENT,comentario
 elementoss,TITULOPAGINA,titulo
 elementoss,SUBSUBSECCION,subsubseccion
@@ -60,14 +60,14 @@ elementoss,INICIOE,lista
 elementoss,NEWPAGE,NEWPAGE
 elementoss,TEXTO,texto
 elementoss,CHAPTER,chapter
-contenidodocumentosubsubseccion,INICIOI,elementosss contenidodocumentosubsubseccion
-contenidodocumentosubsubseccion,TEXTO,elementosss contenidodocumentosubsubseccion
-contenidodocumentosubsubseccion,INICIOE,elementosss contenidodocumentosubsubseccion
-contenidodocumentosubsubseccion,TITULOPAGINA,elementosss contenidodocumentosubsubseccion
 contenidodocumentosubsubseccion,NEWPAGE,elementosss contenidodocumentosubsubseccion
 contenidodocumentosubsubseccion,CHAPTER,elementosss contenidodocumentosubsubseccion
+contenidodocumentosubsubseccion,INICIOE,elementosss contenidodocumentosubsubseccion
+contenidodocumentosubsubseccion,INICIOI,elementosss contenidodocumentosubsubseccion
 contenidodocumentosubsubseccion,COMMENT,elementosss contenidodocumentosubsubseccion
-contenidodocumentosubsubseccion,'',''
+contenidodocumentosubsubseccion,TEXTO,elementosss contenidodocumentosubsubseccion
+contenidodocumentosubsubseccion,TITULOPAGINA,elementosss contenidodocumentosubsubseccion
+contenidodocumentosubsubseccion,'',e
 elementosss,COMMENT,comentario
 elementosss,TITULOPAGINA,titulo
 elementosss,INICIOI,lista
@@ -88,7 +88,7 @@ lista,INICIOI,itemizar
 enumerar,INICIOE,INICIOE LEFT_BRACKET ENUMERAR RIGHT_BRACKET LEFT_KEY items RIGHT_KEY
 itemizar,INICIOI,INICIOI LEFT_BRACKET ITEMIZAR RIGHT_BRACKET LEFT_KEY items RIGHT_KEY
 items,ITEM,item items
-items,'',''
+items,'',e
 item,ITEM,ITEM LEFT_KEY CONTENT RIGHT_KEY
 chapter,CHAPTER,CHAPTER LEFT_BRACKET CONTENT RIGHT_BRACKET LEFT_KEY contenidodocumento RIGHT_KEY
 document_type,ARTICLE,ARTICLE
