@@ -1,0 +1,49 @@
+services:
+
+  # ── Compiler API (FastAPI) ─────────────────────────────────────────────────
+  compiler-api:
+    build:
+      context: ./compiler-api
+      dockerfile: Dockerfile
+      target: runtime        # use the lean runtime stage
+    container_name: cykaflex-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind-mount source for hot-reloading (uvicorn --reload)
+      - ./compiler-api/app:/app/app
+      # Grammar and input files are also live-mounted
+      - ./compiler-api/data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - APP_ENV=development
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── Web Editor (React + Vite) ─────────────────────────────────────────────
+  web-editor:
+    build:
+      context: ./web-editor
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: cykaflex-web
+    ports:
+      - "3000:3000"
+    volumes:
+      # Bind-mount src/ for Vite HMR (Hot Module Replacement)
+      - ./web-editor/src:/app/src
+      # Prevent host node_modules from shadowing the container's
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      # Force Vite to use polling — required on WSL2 / Docker Desktop
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      compiler-api:
+        condition: service_healthy
+    restart: unless-stopped
