@@ -1,0 +1,69 @@
+% Manifiesto de Cykaflex
+clasedocumento[12pt]{articulo}
+
+inicio{documento}
+
+% --- PÁGINA 1 ---
+titulopagina[negrita]{"Cykaflex: De Word a la Tipografía Profesional"}
+
+texto[14pt][cursiva]{"Creado por: Leandro Igor Estrada Santos"}
+
+seccion["El Problema Actual"]{
+    texto{"Durante décadas, los procesadores de texto visuales como Microsoft Word han dominado la creación de documentos. Sin embargo, cualquier profesional o estudiante que haya intentado dar formato a un documento extenso, como una tesis o un informe técnico, conoce la frustración que esto conlleva."}
+    
+    texto{"Imágenes que desconfiguran páginas enteras, saltos de línea impredecibles y estilos inconsistentes son el pan de cada día. Ante esto, el mundo académico y científico adoptó LaTeX, un sistema de composición de textos de altísima calidad tipográfica. El problema radica en que LaTeX tiene una curva de aprendizaje sumamente pronunciada."}
+
+    texto{"Para el usuario común, enfrentarse a comandos en inglés, configuraciones complejas, y la rigidez estructural de los entornos tradicionales resulta fuertemente intimidante. Esta barrera idiomática y técnica aleja a miles de usuarios hispanohablantes de las enormes ventajas de la tipografía profesional."}
+}
+
+% --- PÁGINA 2 ---
+seccion["La Propuesta de Cykaflex"]{
+    texto{"Cykaflex nace como una solución elegante y nativa en español para democratizar la composición de documentos de alto nivel. Es un lenguaje de marcado diseñado desde cero para ser el puente perfecto entre la simplicidad que busca un usuario de ofimática y la potencia que ofrece un motor de compilación."}
+    nuevapagina
+    subseccion["Filosofía del Proyecto"]{
+        texto{"La premisa principal de Cykaflex es la separación absoluta del contenido y la presentación visual. El usuario solo debe preocuparse por escribir y estructurar sus ideas de manera lógica, utilizando un vocabulario que ya conoce en su idioma materno, mientras que el compilador se encarga de todo el diseño tipográfico y la maquetación."}
+        
+        texto{"En lugar de utilizar sintaxis confusa o requerir la instalación de bibliotecas gigantescas, Cykaflex propone una sintaxis limpia, intuitiva y directa. No hay dependencias enormes ni configuraciones misteriosas; es simplemente texto plano que cobra vida."}
+    }
+
+    subseccion["Automatización Tipográfica"]{
+        texto{"Con las últimas actualizaciones, el motor PostScript de Cykaflex se encarga automáticamente de la justificación perfecta de los párrafos, calculando el espacio milimétrico entre palabras. Además, la numeración de secciones y subsecciones se gestiona sin intervención del usuario, garantizando una jerarquía impecable."}
+    }
+}
+
+
+% --- PÁGINA 3 ---
+seccion["Características del Ecosistema"]{
+    texto{"Cykaflex no es solo un compilador; incluye un entorno de desarrollo web retro-moderno con las siguientes capacidades:"}
+
+    inicioi[itemizar]{
+        item{"Sintaxis 100% en Español: Comandos autodescriptivos como 'inicio', 'seccion', 'texto' y 'titulopagina'."}
+        item{"Motor Independiente: Generación de u Árbol de Sintaxis Abstracta (AST) y código PostScript puro desde cero, sin utilizar el programa pdflatex por debajo."}
+        item{"Tamaños de Fuente Dinámicos: Capacidad de alterar el tamaño de bloques de texto específicos al vuelo usando parámetros entre corchetes."}
+        item{"Portabilidad Total: El editor web permite subir, editar y descargar el código fuente en su formato nativo '.cyk', además de exportar de inmediato a PDF o PS."}
+    }
+    
+    texto[10pt]{"Nota: Todo este documento está siendo renderizado en tiempo real por el microservicio backend de Cykaflex."}
+}
+
+
+% --- PÁGINA 4 ---
+seccion["Limitaciones Actuales del Lenguaje"]{
+    texto{"Al ser un proyecto construido estrictamente desde los fundamentos de la teoría de compiladores (con un analizador léxico y un Parser LL(1) predictivo propios), Cykaflex tiene un alcance delimitado intencionalmente. Actualmente, NO es posible realizar lo siguiente:"}
+
+    inicioi[itemizar]{
+        item{"Inserción de Imágenes: El motor PostScript actual no procesa mapas de bits ni vectores externos."}
+        item{"Fórmulas Matemáticas: No existe un entorno para renderizar ecuaciones complejas, fracciones o matrices algebraicas."}
+        item{"Tablas y Grillas: La gramática no soporta aún comandos de tabulación de datos."}
+        item{"Estilos en Línea: Los estilos y tamaños se aplican a bloques completos de texto. Actualmente no es posible poner una sola palabra en negrita dentro de un párrafo."}
+        item{"Índices Automáticos: No hay generación de Tabla de Contenidos o referencias cruzadas dinámicas."}
+    }
+}
+
+seccion["Conclusión"]{
+    texto{"Con determinación y una arquitectura de software limpia, Cykaflex demuestra que es posible crear herramientas académicas poderosas entendiendo cómo funcionan las cosas por debajo del capó."}
+        
+    texto[14pt]{"Bienvenidos a la nueva era de la redacción técnica en español. Bienvenidos a Cykaflex."}
+}
+
+fin{documento}
