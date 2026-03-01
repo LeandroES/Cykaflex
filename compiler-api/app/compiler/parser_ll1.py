@@ -85,7 +85,20 @@ from .lexer import LexError, tokenise  # noqa: F401 — re-exported for callers
 
 
 class ParseError(Exception):
-    """Raised when the parser encounters an unexpected token or EOF."""
+    """Raised when the parser encounters an unexpected token or EOF.
+
+    Attributes
+    ----------
+    line:
+        1-based source line number of the offending token (0 when unknown).
+    col:
+        0-based byte offset (``lexpos``) of the offending token (0 when unknown).
+    """
+
+    def __init__(self, message: str, *, line: int = 0, col: int = 0) -> None:
+        super().__init__(message)
+        self.line = line
+        self.col  = col
 
 
 # ---------------------------------------------------------------------------
@@ -168,12 +181,15 @@ class CykafParser:
         if self._current_type not in token_types:
             expected = " | ".join(token_types)
             if self._current is not None:
-                got = f"'{self._current.value}' ({self._current_type})"
+                got  = f"'{self._current.value}' ({self._current_type})"
                 line = self._current.lineno
+                col  = getattr(self._current, "lexpos", 0)
             else:
-                got, line = "EOF", "?"
+                got, line, col = "fin de archivo", 0, 0
             raise ParseError(
-                f"Línea {line}: se esperaba {expected}, se encontró {got}"
+                f"Línea {line}: se esperaba {expected}, se encontró {got}",
+                line=line,
+                col=col,
             )
         return self._advance()
 
@@ -272,12 +288,15 @@ class CykafParser:
             self._advance()
             return None  # silently discarded
 
-        tok = self._current
-        line = tok.lineno if tok else "?"
+        tok  = self._current
+        line = tok.lineno if tok else 0
+        col  = getattr(tok, "lexpos", 0) if tok else 0
         value = tok.value if tok else "EOF"
         raise ParseError(
             f"Línea {line}: token inesperado '{value}' ({t}) "
-            f"al inicio de un elemento"
+            f"al inicio de un elemento",
+            line=line,
+            col=col,
         )
 
     # ── Block elements ──────────────────────────────────────────────────

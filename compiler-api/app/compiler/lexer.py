@@ -106,7 +106,9 @@ def t_WORD(t: Any) -> Any:
     token_type = _RESERVED.get(t.value)
     if token_type is None:
         raise LexError(
-            f"Identificador desconocido '{t.value}' en línea {t.lineno}"
+            f"Identificador desconocido '{t.value}' en línea {t.lineno}",
+            line=t.lineno,
+            col=t.lexpos,
         )
     t.type = token_type
     return t
@@ -120,7 +122,9 @@ def t_newline(t: Any) -> Any:
 def t_error(t: Any) -> None:
     raise LexError(
         f"Carácter ilegal '{t.value[0]}' "
-        f"en línea {t.lineno}, posición {t.lexpos}"
+        f"en línea {t.lineno}, posición {t.lexpos}",
+        line=t.lineno,
+        col=t.lexpos,
     )
 
 
@@ -129,7 +133,20 @@ def t_error(t: Any) -> None:
 # ---------------------------------------------------------------------------
 
 class LexError(Exception):
-    """Raised when the lexer encounters an unexpected character or identifier."""
+    """Raised when the lexer encounters an unexpected character or identifier.
+
+    Attributes
+    ----------
+    line:
+        1-based source line number where the error occurred.
+    col:
+        0-based byte offset (``lexpos``) of the offending character.
+    """
+
+    def __init__(self, message: str, *, line: int = 0, col: int = 0) -> None:
+        super().__init__(message)
+        self.line = line
+        self.col  = col
 
 
 def build_lexer(*, debug: bool = False) -> lex.Lexer:

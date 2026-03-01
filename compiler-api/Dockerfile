@@ -28,6 +28,11 @@ WORKDIR /app
 # Copy installed packages from builder — keeps image lean
 COPY --from=builder /install /usr/local
 
+# ghostscript: PS→PDF conversion  |  libgs-dev not needed at runtime
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ghostscript \
+    && rm -rf /var/lib/apt/lists/*
+
 # Non-root user for least-privilege execution
 RUN addgroup --system appgroup \
     && adduser --system --ingroup appgroup --no-create-home appuser
