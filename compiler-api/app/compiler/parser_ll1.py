@@ -47,7 +47,8 @@ Grammar (formal — derived from ``input.txt`` and verified against examples)
     subsubseccion       → SUBSUBSECCION LEFT_BRACKET CONTENT RIGHT_BRACKET
                           LEFT_KEY cuerpo RIGHT_KEY
 
-    texto               → TEXTO [LEFT_BRACKET NUMBER PT RIGHT_BRACKET] LEFT_KEY CONTENT RIGHT_KEY
+    texto               → TEXTO modifier* LEFT_KEY CONTENT RIGHT_KEY
+    modifier            → LEFT_BRACKET (NUMBER PT | NEGRITA | CURSIVA) RIGHT_BRACKET
 
     lista               → enumerar | itemizar
     enumerar            → INICIOE LEFT_BRACKET ENNUMERAR RIGHT_BRACKET
@@ -368,22 +369,59 @@ class CykafParser:
         return SubSubSectionNode(title=title_tok.value, children=children)
 
     def _parse_texto(self) -> TextNode:
-        """texto → TEXTO [LEFT_BRACKET NUMBER PT RIGHT_BRACKET] LEFT_KEY CONTENT RIGHT_KEY
+        """texto → TEXTO modifier* LEFT_KEY CONTENT RIGHT_KEY
 
-        The optional ``[Npt]`` bracket lets the author override the font size
-        for a single paragraph (e.g. ``texto[8pt]{"nota al pie..."}``)."""
+        Each optional modifier bracket contributes one of:
+        * ``[Npt]``     → custom font size (e.g. ``[10pt]``)
+        * ``[negrita]`` → bold rendering
+        * ``[cursiva]`` → italic rendering
+
+        Modifiers may appear in any order and are cumulative, so
+        ``texto[14pt][negrita][cursiva]{...}`` is valid.  Duplicate modifiers
+        are silently ignored (last-write-wins for size).  An unrecognised token
+        inside a bracket pair raises :exc:`ParseError`."""
         self._expect("TEXTO")
         custom_size: int | None = None
-        if self._current_type == "LEFT_BRACKET":
+        is_bold   = False
+        is_italic = False
+
+        while self._current_type == "LEFT_BRACKET":
             self._advance()  # consume '['
-            size_tok = self._expect("NUMBER")
-            self._expect("PT")
+            inner = self._current_type
+
+            if inner == "NUMBER":
+                size_tok = self._advance()
+                self._expect("PT")
+                custom_size = int(size_tok.value)
+            elif inner == "NEGRITA":
+                self._advance()
+                is_bold = True
+            elif inner == "CURSIVA":
+                self._advance()
+                is_italic = True
+            else:
+                tok  = self._current
+                line = tok.lineno if tok else 0
+                col  = getattr(tok, "lexpos", 0) if tok else 0
+                val  = tok.value  if tok else "EOF"
+                raise ParseError(
+                    f"Línea {line}: modificador de texto no reconocido '{val}' ({inner}). "
+                    f"Se esperaba un tamaño (ej. 10pt), 'negrita' o 'cursiva'.",
+                    line=line,
+                    col=col,
+                )
+
             self._expect("RIGHT_BRACKET")
-            custom_size = int(size_tok.value)
+
         self._expect("LEFT_KEY")
         content_tok = self._expect("CONTENT")
         self._expect("RIGHT_KEY")
-        return TextNode(content=content_tok.value, custom_size=custom_size)
+        return TextNode(
+            content=content_tok.value,
+            custom_size=custom_size,
+            is_bold=is_bold,
+            is_italic=is_italic,
+        )
 
     # ── List elements ───────────────────────────────────────────────────
 

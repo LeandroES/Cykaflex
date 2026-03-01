@@ -73,9 +73,10 @@ _MARGIN_Y  = 72    # Top  / bottom margin (1 inch)
 _CONTENT_W = _PAGE_W - 2 * _MARGIN_X   # 451 pt usable width
 
 # Standard PostScript Type-1 font names (available in every PS interpreter)
-_FONT_NORMAL = "Helvetica-Latin1"
-_FONT_BOLD   = "Helvetica-Bold-Latin1"
-_FONT_ITALIC = "Helvetica-Oblique-Latin1"
+_FONT_NORMAL      = "Helvetica-Latin1"
+_FONT_BOLD        = "Helvetica-Bold-Latin1"
+_FONT_ITALIC      = "Helvetica-Oblique-Latin1"
+_FONT_BOLD_ITALIC = "Helvetica-BoldOblique-Latin1"
 
 # Average character-width coefficient for Helvetica (empirical)
 _CHAR_W = 0.55
@@ -273,17 +274,35 @@ class LayoutEngine:
 
         self.vspace(_SPACE_AFTER_HEADING)
 
-    def draw_text(self, text: str, size: int) -> None:
+    def draw_text(
+        self,
+        text: str,
+        size: int,
+        is_bold: bool = False,
+        is_italic: bool = False,
+    ) -> None:
         """Render a paragraph of body text with word-wrapping and full justification.
 
         Parameters
         ----------
         size:
-            Font size in points.  The caller passes either the document's base
-            size or a per-paragraph override (from ``texto[Npt]{...}``).
+            Font size in points (document base or per-paragraph override).
+        is_bold:
+            Render in bold weight.
+        is_italic:
+            Render in italic (oblique) style.
         """
+        if is_bold and is_italic:
+            font = _FONT_BOLD_ITALIC
+        elif is_bold:
+            font = _FONT_BOLD
+        elif is_italic:
+            font = _FONT_ITALIC
+        else:
+            font = _FONT_NORMAL
+
         self.vspace(_SPACE_BEFORE_TEXT)
-        self._wrap_draw(text, _FONT_NORMAL, size, justify=True)
+        self._wrap_draw(text, font, size, justify=True)
         self.vspace(_SPACE_AFTER_TEXT)
 
     def draw_list(self, items: list[str], ordered: bool, base_size: int) -> None:
@@ -397,7 +416,7 @@ class PostScriptVisitor(NodeVisitor):
 
     def visit_text(self, node: TextNode) -> None:
         size = node.custom_size if node.custom_size is not None else self._base_size
-        self._engine.draw_text(node.content, size)
+        self._engine.draw_text(node.content, size, node.is_bold, node.is_italic)
 
     def visit_list(self, node: ListNode) -> None:
         """Collect item texts and delegate to the engine's list renderer."""
@@ -442,6 +461,7 @@ def _preamble(title: str) -> str:
         f"/Helvetica-Latin1 /Helvetica ReEncodeFont\n"
         f"/Helvetica-Bold-Latin1 /Helvetica-Bold ReEncodeFont\n"
         f"/Helvetica-Oblique-Latin1 /Helvetica-Oblique ReEncodeFont\n"
+        f"/Helvetica-BoldOblique-Latin1 /Helvetica-BoldOblique ReEncodeFont\n"
         f"\n"
         f"% --- Macro para Justificar Texto Exacto ---\n"
         f"/JustifyShow {{\n"

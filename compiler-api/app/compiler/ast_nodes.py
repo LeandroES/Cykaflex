@@ -18,7 +18,7 @@ Node hierarchy
     ├── SectionNode           — seccion["Title"]{ body }
     ├── SubSectionNode        — subseccion["Title"]{ body }
     ├── SubSubSectionNode     — subsubseccion["Title"]{ body }
-    ├── TextNode              — texto{"content"} | texto[Npt]{"content"}
+    ├── TextNode              — texto[Npt][negrita][cursiva]{"content"} (all modifiers optional)
     ├── ListNode              — inicioe/inicioi list container
     ├── ListItemNode          — item{"content"}
     └── NewPageNode           — nuevapagina
@@ -207,7 +207,15 @@ class SubSubSectionNode(ASTNode):
 
 @dataclass
 class TextNode(ASTNode):
-    """Represents a ``texto{"content"}`` or ``texto[Npt]{"content"}`` directive.
+    """Represents a ``texto`` directive, optionally with inline modifiers.
+
+    Syntax variants (modifiers may appear in any order)::
+
+        texto{"content"}
+        texto[12pt]{"content"}
+        texto[negrita]{"content"}
+        texto[cursiva]{"content"}
+        texto[14pt][negrita][cursiva]{"content"}
 
     Attributes
     ----------
@@ -216,18 +224,33 @@ class TextNode(ASTNode):
     custom_size:
         Optional font size override in points.  When ``None`` the document's
         base font size is used instead.
+    is_bold:
+        When ``True`` the paragraph is rendered in bold (Helvetica-Bold or
+        Helvetica-BoldOblique when combined with *is_italic*).
+    is_italic:
+        When ``True`` the paragraph is rendered in italic (Helvetica-Oblique or
+        Helvetica-BoldOblique when combined with *is_bold*).
     """
 
     content: str
     custom_size: int | None = None
+    is_bold: bool = False
+    is_italic: bool = False
 
     def accept(self, visitor: NodeVisitor) -> None:
         visitor.visit_text(self)
 
     def __repr__(self) -> str:
         preview = self.content[:40] + "…" if len(self.content) > 40 else self.content
-        size_info = f", size={self.custom_size}pt" if self.custom_size is not None else ""
-        return f"TextNode({preview!r}{size_info})"
+        mods: list[str] = []
+        if self.custom_size is not None:
+            mods.append(f"size={self.custom_size}pt")
+        if self.is_bold:
+            mods.append("bold")
+        if self.is_italic:
+            mods.append("italic")
+        suffix = (", " + ", ".join(mods)) if mods else ""
+        return f"TextNode({preview!r}{suffix})"
 
 
 @dataclass
