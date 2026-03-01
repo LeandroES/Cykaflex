@@ -57,7 +57,7 @@ La API REST está expuesta con **FastAPI + Uvicorn** y ofrece:
 - `POST /tokenise` — depuración: devuelve lista de tokens
 - `POST /ast` — depuración: devuelve el AST en JSON
 
-### 🖥️ Frontend — `web-editor`
+### Frontend — `web-editor`
 
 Interfaz de usuario retro-moderna inspirada en la estética **NeXTSTEP / Windows 95**, con fuentes del sistema, fondos `#C0C0C0` y bordes biselados. Tecnologías clave:
 
