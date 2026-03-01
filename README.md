@@ -1,10 +1,11 @@
-# ◆ Cykaflex
+# Cykaflex
 
 > **Un lenguaje de marcas tipográfico en español, con compilador nativo a PostScript.**
 
 Cykaflex es un sistema de composición de documentos diseñado como alternativa hispanohablante a LaTeX. Su filosofía central es la **separación estricta entre contenido y presentación**: el autor escribe _qué_ dice el documento en sintaxis Cykaflex (archivos `.cyk`), y el compilador decide _cómo_ se ve, generando PostScript puro sin depender de `pdflatex` ni de ninguna distribución TeX.
 
 ---
+<img width="1073" height="1161" alt="1" src="https://github.com/user-attachments/assets/ffc1e0f4-29ef-4da2-9543-bf0e51d4ef64" />
 
 ## Arquitectura del Proyecto — Cloud-Native
 
@@ -57,7 +58,7 @@ La API REST está expuesta con **FastAPI + Uvicorn** y ofrece:
 - `POST /tokenise` — depuración: devuelve lista de tokens
 - `POST /ast` — depuración: devuelve el AST en JSON
 
-### 🖥️ Frontend — `web-editor`
+### Frontend — `web-editor`
 
 Interfaz de usuario retro-moderna inspirada en la estética **NeXTSTEP / Windows 95**, con fuentes del sistema, fondos `#C0C0C0` y bordes biselados. Tecnologías clave:
 
