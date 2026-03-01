@@ -63,6 +63,18 @@ export default function App() {
     document.addEventListener('mouseup',   onMouseUp);
   }, []);
 
+  /* ── Save source ────────────────────────────────────────────── */
+
+  const handleSaveSource = useCallback(() => {
+    const blob = new Blob([source], { type: 'text/plain;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'documento.cyk';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [source]);
+
   /* ── Download ───────────────────────────────────────────────── */
 
   const handleDownload = useCallback(() => {
@@ -98,6 +110,8 @@ export default function App() {
         format={format}
         onFormatChange={setFormat}
         onDownload={handleDownload}
+        onSaveSource={handleSaveSource}
+        hasSource={source.trim().length > 0}
       />
 
       {/* ── Split pane ──────────────────────────────────────── */}

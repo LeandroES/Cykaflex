@@ -1,6 +1,6 @@
 import './Toolbar.css';
 
-export default function Toolbar({ status, result, format, onFormatChange, onDownload }) {
+export default function Toolbar({ status, result, format, onFormatChange, onDownload, onSaveSource, hasSource }) {
   const canDownload = !!(result?.url || result?.psText);
 
   const statusConfig = {
@@ -37,14 +37,24 @@ export default function Toolbar({ status, result, format, onFormatChange, onDown
           </select>
         </label>
 
-        {/* Download */}
+        {/* Save source */}
+        <button
+          className="btn"
+          onClick={onSaveSource}
+          disabled={!hasSource}
+          title={hasSource ? 'Guardar código fuente como .cyk' : 'El editor está vacío'}
+        >
+          💾 Guardar .cyk
+        </button>
+
+        {/* Download compiled output */}
         <button
           className="btn"
           onClick={onDownload}
           disabled={!canDownload}
           title={canDownload ? 'Descargar documento compilado' : 'Sin documento compilado'}
         >
-          ▼ Descargar
+          ▼ Descargar Salida
         </button>
       </div>
 
