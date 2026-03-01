@@ -4,8 +4,8 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY package*.json ./
-# ci = clean install, respects package-lock.json exactly
-RUN npm ci
+# install, si no encuentra el package-lock.json lo genera
+RUN npm install
 
 
 # ── Stage 2: development runtime ─────────────────────────────────────────────
