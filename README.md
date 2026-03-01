@@ -1,4 +1,4 @@
-# ◆ Cykaflex
+# Cykaflex
 
 > **Un lenguaje de marcas tipográfico en español, con compilador nativo a PostScript.**
 
