@@ -5,6 +5,7 @@
 Cykaflex es un sistema de composición de documentos diseñado como alternativa hispanohablante a LaTeX. Su filosofía central es la **separación estricta entre contenido y presentación**: el autor escribe _qué_ dice el documento en sintaxis Cykaflex (archivos `.cyk`), y el compilador decide _cómo_ se ve, generando PostScript puro sin depender de `pdflatex` ni de ninguna distribución TeX.
 
 ---
+<img width="1073" height="1161" alt="1" src="https://github.com/user-attachments/assets/ffc1e0f4-29ef-4da2-9543-bf0e51d4ef64" />
 
 ## Arquitectura del Proyecto — Cloud-Native
 
