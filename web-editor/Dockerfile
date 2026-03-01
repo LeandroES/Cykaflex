@@ -16,6 +16,9 @@ WORKDIR /app
 # Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 
+#Copiar el package.json al runtime
+COPY package*.json ./
+
 # Config files needed at startup (source overridden by bind-mount in dev)
 COPY vite.config.js index.html ./
 COPY src/ ./src/
