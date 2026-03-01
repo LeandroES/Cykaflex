@@ -1,0 +1,85 @@
+/* ── Root application shell ─────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Split-pane content area ───────────────────────────────────── */
+
+.content {
+  flex: 1;
+  display: flex;
+  min-height: 0;       /* critical: lets flex children shrink below content size */
+  overflow: hidden;
+}
+
+/* ── Individual pane (left / right) ────────────────────────────── */
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pane-titlebar {
+  flex-shrink: 0;
+  height: 20px;
+  background: var(--clr-accent);
+  background-image: linear-gradient(90deg, var(--clr-accent) 0%, var(--clr-accent-hi) 100%);
+  color: var(--clr-accent-fg);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  user-select: none;
+}
+
+.pane-titlebar-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--clr-accent-fg);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.pane-body {
+  flex: 1;
+  min-height: 0;        /* critical: Monaco uses height:100% inside */
+  overflow: hidden;
+  padding: 4px;
+  background: var(--clr-bg);
+}
+
+/* ── Drag divider ───────────────────────────────────────────────── */
+
+.divider {
+  width: 6px;
+  flex-shrink: 0;
+  background: var(--clr-bg);
+  cursor: col-resize;
+  border-left:  1px solid var(--bevel-dark);
+  border-right: 1px solid var(--bevel-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider::before {
+  content: '⋮';
+  color: var(--clr-bg-dark);
+  font-size: 14px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.divider:hover {
+  background: var(--clr-bg-light);
+}

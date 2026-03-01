@@ -1,0 +1,130 @@
+/* ================================================================
+   Cykaflex Editor — Global Retro Design System
+   Aesthetic: NeXTSTEP + Win95 + Mosaic Browser (1990s)
+   ================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Base palette */
+  --clr-bg:          #C0C0C0;
+  --clr-bg-light:    #D4D0C8;
+  --clr-bg-dark:     #808080;
+  --clr-bg-darker:   #404040;
+  --clr-white:       #FFFFFF;
+  --clr-black:       #000000;
+
+  /* Accent — window title blue (NeXTSTEP / Win95) */
+  --clr-accent:      #000080;
+  --clr-accent-hi:   #1084D0;
+  --clr-accent-fg:   #FFFFFF;
+
+  /* Bevel shading */
+  --bevel-light:     #FFFFFF;
+  --bevel-mid:       #C0C0C0;
+  --bevel-dark:      #808080;
+  --bevel-darker:    #404040;
+
+  /* Terminal */
+  --term-bg:         #0A0A0A;
+  --term-green:      #39FF14;
+  --term-red:        #FF3333;
+  --term-yellow:     #FFD700;
+  --term-gray:       #888888;
+  --term-white:      #E0E0E0;
+
+  /* Typography */
+  --font-ui:   "MS Sans Serif", "Chicago", Arial, Helvetica, sans-serif;
+  --font-mono: "Courier New", "Lucida Console", Monaco, monospace;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--clr-bg);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--clr-black);
+  user-select: none;
+}
+
+/* ── 3-D Bevel utilities ───────────────────────────────────────── */
+
+.raised {
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+}
+
+.sunken {
+  border: 2px solid;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+}
+
+.deep-sunken {
+  border: 2px solid;
+  border-color: var(--bevel-darker) var(--bevel-light) var(--bevel-light) var(--bevel-darker);
+  box-shadow: inset 1px 1px 0 var(--bevel-dark);
+}
+
+/* ── Button ───────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 12px 3px;
+  background: var(--clr-bg);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--clr-black);
+  cursor: pointer;
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  outline: 1px solid var(--clr-black);
+  outline-offset: -3px;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--clr-bg-light);
+}
+
+.btn:active:not(:disabled) {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  padding: 3px 11px 2px 13px;
+}
+
+.btn:disabled {
+  color: var(--clr-bg-dark);
+  cursor: default;
+}
+
+/* ── Scrollbars (WebKit — retro-style) ────────────────────────── */
+
+::-webkit-scrollbar              { width: 16px; height: 16px; }
+::-webkit-scrollbar-track        { background: var(--clr-bg); border: 1px solid var(--bevel-dark); }
+::-webkit-scrollbar-thumb        { background: var(--clr-bg); border: 2px solid;
+                                   border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light); }
+::-webkit-scrollbar-button       { background: var(--clr-bg); border: 2px solid;
+                                   border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+                                   height: 16px; width: 16px; }
+::-webkit-scrollbar-corner       { background: var(--clr-bg); }
+
+/* ── Keyframes ────────────────────────────────────────────────── */
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes led-pulse {
+  0%, 100% { box-shadow: 0 0 0   0   rgba(255, 51, 51, 0.7); }
+  50%      { box-shadow: 0 0 5px 4px rgba(255, 51, 51, 0);   }
+}

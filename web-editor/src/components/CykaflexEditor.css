@@ -1,0 +1,5 @@
+.editor-shell {
+  /* Fills pane-body completely; Monaco uses height="100%" inside */
+  height: 100%;
+  overflow: hidden;
+}

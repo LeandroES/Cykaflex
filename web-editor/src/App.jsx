@@ -1,53 +1,145 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react';
+
+import Toolbar        from './components/Toolbar';
+import CykaflexEditor from './components/CykaflexEditor';
+import PreviewPanel   from './components/PreviewPanel';
+import ErrorConsole   from './components/ErrorConsole';
+import StatusBar      from './components/StatusBar';
+import { useCompile } from './hooks/useCompile';
+
+import './App.css';
+
+/* ── Starter document shown on first load ─────────────────────── */
+const INITIAL_SOURCE = `clasedocumento[12pt]{articulo}
+inicio{documento}
+titulopagina[negrita]{"Mi Documento Cykaflex"}
+texto{"Bienvenido al editor Cykaflex."}
+texto{"Este documento se compila automaticamente."}
+fin{documento}
+`;
+
+/* ── Root component ───────────────────────────────────────────── */
 
 export default function App() {
-  const [source, setSource] = useState('')
-  const [output, setOutput] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [source,      setSource]      = useState(INITIAL_SOURCE);
+  const [format,      setFormat]      = useState('auto');
+  const [splitPos,    setSplitPos]    = useState(50);   /* % */
+  const [consoleOpen, setConsoleOpen] = useState(false);
 
-  async function handleCompile() {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/compile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ source }),
-      })
-      const data = await res.json()
-      setOutput(data)
-    } catch (err) {
-      setOutput({ error: err.message })
-    } finally {
-      setLoading(false)
+  const containerRef = useRef(null);
+  const draggingRef  = useRef(false);
+
+  const { result, compileError, status } = useCompile(source, format);
+
+  /* Auto-open error console whenever a new compile error arrives */
+  useEffect(() => {
+    if (compileError) setConsoleOpen(true);
+  }, [compileError]);
+
+  /* ── Split-pane drag ────────────────────────────────────────── */
+
+  const handleDividerMouseDown = useCallback((e) => {
+    e.preventDefault();
+    draggingRef.current = true;
+    document.body.style.cursor     = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    const onMouseMove = (ev) => {
+      if (!draggingRef.current || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const pct  = ((ev.clientX - rect.left) / rect.width) * 100;
+      setSplitPos(Math.max(20, Math.min(80, pct)));
+    };
+
+    const onMouseUp = () => {
+      draggingRef.current = false;
+      document.body.style.cursor     = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup',   onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup',   onMouseUp);
+  }, []);
+
+  /* ── Download ───────────────────────────────────────────────── */
+
+  const handleDownload = useCallback(() => {
+    if (!result) return;
+
+    const a = document.createElement('a');
+
+    if (result.url) {
+      /* PDF — already a Blob URL */
+      a.href     = result.url;
+      a.download = 'documento.pdf';
+    } else if (result.psText) {
+      /* PostScript — create Blob on the fly */
+      const blob = new Blob([result.psText], { type: 'application/postscript' });
+      a.href     = URL.createObjectURL(blob);
+      a.download = 'documento.ps';
+    } else {
+      return;
     }
-  }
+
+    a.click();
+  }, [result]);
+
+  /* ── Render ─────────────────────────────────────────────────── */
 
   return (
-    <main style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-      <h1>Cykaflex Editor</h1>
-      <p>Lenguaje de marcado tipográfico en español</p>
+    <div className="app">
 
-      <textarea
-        value={source}
-        onChange={(e) => setSource(e.target.value)}
-        placeholder="Escribe tu código Cykaflex aquí..."
-        rows={16}
-        style={{ width: '100%', fontSize: '14px', padding: '0.5rem', boxSizing: 'border-box' }}
+      {/* ── Toolbar ─────────────────────────────────────────── */}
+      <Toolbar
+        status={status}
+        result={result}
+        format={format}
+        onFormatChange={setFormat}
+        onDownload={handleDownload}
       />
 
-      <button
-        onClick={handleCompile}
-        disabled={loading || !source.trim()}
-        style={{ marginTop: '0.5rem', padding: '0.5rem 1.5rem', cursor: 'pointer' }}
-      >
-        {loading ? 'Compilando...' : 'Compilar'}
-      </button>
+      {/* ── Split pane ──────────────────────────────────────── */}
+      <div className="content" ref={containerRef}>
 
-      {output && (
-        <pre style={{ marginTop: '1rem', background: '#f4f4f4', padding: '1rem', overflowX: 'auto' }}>
-          {JSON.stringify(output, null, 2)}
-        </pre>
-      )}
-    </main>
-  )
+        {/* Left pane — editor */}
+        <div className="pane" style={{ width: `${splitPos}%` }}>
+          <div className="pane-titlebar">
+            <span className="pane-titlebar-dot" />
+            EDITOR CYKAFLEX
+          </div>
+          <div className="pane-body">
+            <CykaflexEditor value={source} onChange={setSource} />
+          </div>
+        </div>
+
+        {/* Drag handle */}
+        <div className="divider" onMouseDown={handleDividerMouseDown} />
+
+        {/* Right pane — preview */}
+        <div className="pane" style={{ width: `${100 - splitPos}%` }}>
+          <div className="pane-titlebar">
+            <span className="pane-titlebar-dot" />
+            PREVISUALIZACION
+          </div>
+          <div className="pane-body">
+            <PreviewPanel result={result} status={status} />
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── Error console ───────────────────────────────────── */}
+      <ErrorConsole
+        error={compileError}
+        open={consoleOpen}
+        onToggle={() => setConsoleOpen(o => !o)}
+      />
+
+      {/* ── Status bar ──────────────────────────────────────── */}
+      <StatusBar status={status} error={compileError} result={result} />
+
+    </div>
+  );
 }

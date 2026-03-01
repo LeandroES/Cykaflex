@@ -1,0 +1,93 @@
+.toolbar {
+  flex-shrink: 0;
+  height: 34px;
+  background: var(--clr-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 8px;
+  /* raised bevel is applied via className */
+}
+
+/* ── Brand ─────────────────────────────────────────────────────── */
+
+.toolbar-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.toolbar-logo {
+  color: var(--clr-accent);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.toolbar-name {
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.toolbar-sub {
+  font-size: 10px;
+  color: var(--clr-bg-dark);
+}
+
+/* ── Separator ─────────────────────────────────────────────────── */
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--bevel-dark);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── Controls ──────────────────────────────────────────────────── */
+
+.toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.toolbar-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.toolbar-select {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  background: var(--clr-white);
+  color: var(--clr-black);
+  padding: 1px 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── Status chip ───────────────────────────────────────────────── */
+
+.toolbar-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 1px 8px;
+  border: 1px solid var(--bevel-dark);
+  background: var(--clr-white);
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.toolbar-status-icon {
+  font-size: 10px;
+}
+
+.toolbar-st--compiling { color: var(--clr-bg-darker); }
+.toolbar-st--ok        { color: #006400; font-weight: bold; }
+.toolbar-st--error     { color: #800000; font-weight: bold; }

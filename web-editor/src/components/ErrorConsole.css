@@ -1,0 +1,101 @@
+.ec-root {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Title bar ─────────────────────────────────────────────────── */
+
+.ec-bar {
+  flex-shrink: 0;
+  height: 22px;
+  background: var(--clr-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 7px;
+  cursor: pointer;
+  border: none;
+  border-top: 1px solid var(--bevel-light);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--clr-black);
+  text-align: left;
+  width: 100%;
+}
+
+.ec-bar:hover {
+  background: var(--clr-bg-light);
+}
+
+.ec-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #FF3333;
+  border: 1px solid var(--bevel-dark);
+  flex-shrink: 0;
+  animation: led-pulse 1.5s ease-in-out infinite;
+}
+
+.ec-bar-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ec-toggle {
+  font-size: 9px;
+  color: var(--clr-bg-dark);
+  flex-shrink: 0;
+}
+
+/* ── Terminal body — max-height accordion ─────────────────────── */
+
+.ec-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.18s ease-out;
+
+  /* Terminal content styles applied here (visible once expanded) */
+  background: var(--term-bg);
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ec-body--open {
+  max-height: 160px;
+}
+
+/* ── Terminal line atoms ────────────────────────────────────────── */
+
+.term-line {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.term-prompt { color: var(--term-green); flex-shrink: 0; }
+.term-cmd    { color: var(--term-white); }
+
+.term-err .term-badge {
+  color: var(--term-red);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.term-err .term-loc { color: var(--term-yellow); }
+.term-err .term-msg { color: var(--term-red);    }
+
+.term-cursor {
+  color: var(--term-green);
+  animation: blink 1s step-end infinite;
+}

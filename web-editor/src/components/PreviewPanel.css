@@ -1,0 +1,100 @@
+.preview-shell {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--clr-white);
+}
+
+.preview-empty {
+  background: var(--clr-bg);
+}
+
+/* ── Placeholder ───────────────────────────────────────────────── */
+
+.preview-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--clr-bg-dark);
+  padding: 20px;
+  text-align: center;
+}
+
+.ph-icon {
+  font-size: 48px;
+  opacity: 0.35;
+  line-height: 1;
+}
+
+.ph-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.ph-hint {
+  font-size: 11px;
+  max-width: 220px;
+  opacity: 0.75;
+}
+
+/* ── PDF iframe ────────────────────────────────────────────────── */
+
+.preview-iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ── PostScript viewer ─────────────────────────────────────────── */
+
+.ps-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ps-viewer-bar {
+  flex-shrink: 0;
+  height: 22px;
+  background: var(--clr-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: bold;
+  border-bottom: 1px solid var(--bevel-dark);
+}
+
+.ps-badge {
+  background: var(--clr-accent);
+  color: var(--clr-accent-fg);
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.ps-content {
+  flex: 1;
+  overflow: auto;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  background: var(--clr-white);
+  color: var(--clr-black);
+  white-space: pre;
+}
+
+/* ── Blink animation (shared) ─────────────────────────────────── */
+
+.blink {
+  animation: blink 1s step-end infinite;
+}

@@ -1,0 +1,43 @@
+.statusbar {
+  flex-shrink: 0;
+  height: 22px;
+  background: var(--clr-bg);
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--bevel-light);
+  font-size: 11px;
+  overflow: hidden;
+}
+
+.sb-seg {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  height: 100%;
+  border-right: 1px solid var(--bevel-dark);
+  white-space: nowrap;
+}
+
+.sb-seg:last-child {
+  border-right: none;
+}
+
+.sb-spacer {
+  flex: 1;
+}
+
+.sb-seg--error {
+  color: #800000;
+  font-weight: bold;
+}
+
+.sb-seg--format {
+  color: var(--clr-accent);
+  font-weight: bold;
+}
+
+/* ── Status colours applied to root ──────────────────────────── */
+.sb--ok .sb-seg:first-child     { color: #006400; font-weight: bold; }
+.sb--error .sb-seg:first-child  { color: #800000; font-weight: bold; }
+.sb--compiling .sb-seg:first-child { color: var(--clr-bg-darker); }
