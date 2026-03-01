@@ -47,7 +47,7 @@ Grammar (formal — derived from ``input.txt`` and verified against examples)
     subsubseccion       → SUBSUBSECCION LEFT_BRACKET CONTENT RIGHT_BRACKET
                           LEFT_KEY cuerpo RIGHT_KEY
 
-    texto               → TEXTO LEFT_KEY CONTENT RIGHT_KEY
+    texto               → TEXTO [LEFT_BRACKET NUMBER PT RIGHT_BRACKET] LEFT_KEY CONTENT RIGHT_KEY
 
     lista               → enumerar | itemizar
     enumerar            → INICIOE LEFT_BRACKET ENNUMERAR RIGHT_BRACKET
@@ -368,12 +368,22 @@ class CykafParser:
         return SubSubSectionNode(title=title_tok.value, children=children)
 
     def _parse_texto(self) -> TextNode:
-        """texto → TEXTO LEFT_KEY CONTENT RIGHT_KEY"""
+        """texto → TEXTO [LEFT_BRACKET NUMBER PT RIGHT_BRACKET] LEFT_KEY CONTENT RIGHT_KEY
+
+        The optional ``[Npt]`` bracket lets the author override the font size
+        for a single paragraph (e.g. ``texto[8pt]{"nota al pie..."}``)."""
         self._expect("TEXTO")
+        custom_size: int | None = None
+        if self._current_type == "LEFT_BRACKET":
+            self._advance()  # consume '['
+            size_tok = self._expect("NUMBER")
+            self._expect("PT")
+            self._expect("RIGHT_BRACKET")
+            custom_size = int(size_tok.value)
         self._expect("LEFT_KEY")
         content_tok = self._expect("CONTENT")
         self._expect("RIGHT_KEY")
-        return TextNode(content=content_tok.value)
+        return TextNode(content=content_tok.value, custom_size=custom_size)
 
     # ── List elements ───────────────────────────────────────────────────
 

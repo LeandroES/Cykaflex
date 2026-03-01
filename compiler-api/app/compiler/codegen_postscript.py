@@ -188,6 +188,7 @@ class LayoutEngine:
         size: int,
         indent_pts: int = 0,
         x_center: bool = False,
+        justify: bool = False,
     ) -> None:
         """Set font, word-wrap *text*, and draw each wrapped line.
 
@@ -197,16 +198,50 @@ class LayoutEngine:
             Extra left indent in points (used for list continuation lines).
         x_center:
             When ``True`` each line is horizontally centred on the page.
+        justify:
+            When ``True`` all lines except the last are fully justified
+            (left-to-right margins) using PostScript ``widthshow``, which
+            distributes the residual horizontal space evenly between words.
+            The last line (and any single-word line) is rendered flush-left
+            with a plain ``show`` to avoid ugly stretching.
         """
         self._set_font(font, size)
         width = self._chars_per_line(size, indent_pts)
         wrapped = textwrap.wrap(text, width=width) or [""]
+        last_idx = len(wrapped) - 1
 
-        for line in wrapped:
+        for idx, line in enumerate(wrapped):
             if x_center:
                 str_w = len(line) * size * _CHAR_W
                 cx = max(_MARGIN_X, int((_PAGE_W - str_w) / 2))
                 self._draw_line(line, x_override=cx)
+            elif justify and idx < last_idx:
+                # Full justification for every non-last wrapped line.
+                # We estimate the rendered width of the text using the same
+                # _CHAR_W coefficient used throughout the layout engine, then
+                # distribute the residual space evenly across inter-word gaps
+                # via PostScript's widthshow operator:
+                #   ax ay charcode string widthshow
+                # adds (ax, ay) after each occurrence of charcode (32 = space).
+                num_spaces = line.count(" ")
+                if num_spaces > 0:
+                    usable  = _CONTENT_W - indent_pts
+                    text_w  = len(line) * size * _CHAR_W
+                    extra   = max(0.0, (usable - text_w) / num_spaces)
+                    lh = self._line_h(self._size)
+                    self._check_break(lh)
+                    x = self._x + indent_pts
+                    self._emit(
+                        f"{x} {self._y} moveto "
+                        f"{extra:.3f} 0 32 ({self._escape(line)}) widthshow"
+                    )
+                    self._y -= lh
+                else:
+                    # Single-word line — fall back to flush-left show
+                    old_x = self._x
+                    self._x += indent_pts
+                    self._draw_line(line)
+                    self._x = old_x
             else:
                 old_x = self._x
                 self._x += indent_pts
@@ -269,10 +304,17 @@ class LayoutEngine:
 
         self.vspace(_SPACE_AFTER_HEADING)
 
-    def draw_text(self, text: str, base_size: int) -> None:
-        """Render a paragraph of body text with automatic word-wrapping."""
+    def draw_text(self, text: str, size: int) -> None:
+        """Render a paragraph of body text with word-wrapping and full justification.
+
+        Parameters
+        ----------
+        size:
+            Font size in points.  The caller passes either the document's base
+            size or a per-paragraph override (from ``texto[Npt]{...}``).
+        """
         self.vspace(_SPACE_BEFORE_TEXT)
-        self._wrap_draw(text, _FONT_NORMAL, base_size)
+        self._wrap_draw(text, _FONT_NORMAL, size, justify=True)
         self.vspace(_SPACE_AFTER_TEXT)
 
     def draw_list(self, items: list[str], ordered: bool, base_size: int) -> None:
@@ -336,8 +378,10 @@ class PostScriptVisitor(NodeVisitor):
     """
 
     def __init__(self, base_font_size: int = 12) -> None:
-        self._engine    = LayoutEngine(base_font_size)
-        self._base_size = base_font_size
+        self._engine           = LayoutEngine(base_font_size)
+        self._base_size        = base_font_size
+        self._section_count    = 0   # incremented on each SectionNode visit
+        self._subsection_count = 0   # reset to 0 on each new section
 
     @property
     def engine(self) -> LayoutEngine:
@@ -362,12 +406,18 @@ class PostScriptVisitor(NodeVisitor):
             child.accept(self)
 
     def visit_section(self, node: SectionNode) -> None:
-        self._engine.draw_heading(node.title, level=2, base_size=self._base_size)
+        self._section_count += 1
+        self._subsection_count = 0
+        numbered_title = f"{self._section_count}. {node.title}"
+        self._engine.draw_heading(numbered_title, level=2, base_size=self._base_size)
         for child in node.children:
             child.accept(self)
 
     def visit_subsection(self, node: SubSectionNode) -> None:
-        self._engine.draw_heading(node.title, level=3, base_size=self._base_size)
+        self._subsection_count += 1
+        letter = chr(64 + self._subsection_count)  # 1→A, 2→B, …
+        numbered_title = f"{letter}. {node.title}"
+        self._engine.draw_heading(numbered_title, level=3, base_size=self._base_size)
         for child in node.children:
             child.accept(self)
 
@@ -377,7 +427,8 @@ class PostScriptVisitor(NodeVisitor):
             child.accept(self)
 
     def visit_text(self, node: TextNode) -> None:
-        self._engine.draw_text(node.content, self._base_size)
+        size = node.custom_size if node.custom_size is not None else self._base_size
+        self._engine.draw_text(node.content, size)
 
     def visit_list(self, node: ListNode) -> None:
         """Collect item texts and delegate to the engine's list renderer."""

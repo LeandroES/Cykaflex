@@ -18,7 +18,7 @@ Node hierarchy
     ├── SectionNode           — seccion["Title"]{ body }
     ├── SubSectionNode        — subseccion["Title"]{ body }
     ├── SubSubSectionNode     — subsubseccion["Title"]{ body }
-    ├── TextNode              — texto{"content"}
+    ├── TextNode              — texto{"content"} | texto[Npt]{"content"}
     ├── ListNode              — inicioe/inicioi list container
     ├── ListItemNode          — item{"content"}
     └── NewPageNode           — nuevapagina
@@ -207,22 +207,27 @@ class SubSubSectionNode(ASTNode):
 
 @dataclass
 class TextNode(ASTNode):
-    """Represents a ``texto{"content"}`` directive.
+    """Represents a ``texto{"content"}`` or ``texto[Npt]{"content"}`` directive.
 
     Attributes
     ----------
     content:
         The raw text string without surrounding quotes.
+    custom_size:
+        Optional font size override in points.  When ``None`` the document's
+        base font size is used instead.
     """
 
     content: str
+    custom_size: int | None = None
 
     def accept(self, visitor: NodeVisitor) -> None:
         visitor.visit_text(self)
 
     def __repr__(self) -> str:
         preview = self.content[:40] + "…" if len(self.content) > 40 else self.content
-        return f"TextNode({preview!r})"
+        size_info = f", size={self.custom_size}pt" if self.custom_size is not None else ""
+        return f"TextNode({preview!r}{size_info})"
 
 
 @dataclass
