@@ -70,6 +70,18 @@
   outline: none;
 }
 
+/* ── Filename input ────────────────────────────────────────────── */
+
+.toolbar-input {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  width: 120px;
+  background: var(--clr-white);
+  color: var(--clr-black);
+  padding: 1px 4px;
+  outline: none;
+}
+
 /* ── Status chip ───────────────────────────────────────────────── */
 
 .toolbar-status {

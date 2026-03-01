@@ -1,6 +1,8 @@
+import { useRef } from 'react';
 import './Toolbar.css';
 
-export default function Toolbar({ status, result, format, onFormatChange, onDownload, onSaveSource, hasSource }) {
+export default function Toolbar({ status, result, format, onFormatChange, onDownload, onSaveSource, hasSource, filename, setFilename, handleFileUpload }) {
+  const fileInputRef = useRef(null);
   const canDownload = !!(result?.url || result?.psText);
 
   const statusConfig = {
@@ -16,7 +18,7 @@ export default function Toolbar({ status, result, format, onFormatChange, onDown
       <div className="toolbar-brand">
         <span className="toolbar-logo" aria-hidden="true">◆</span>
         <span className="toolbar-name">CYKAFLEX</span>
-        <span className="toolbar-sub">Editor v0.2</span>
+        <span className="toolbar-sub">Editor v0.3</span>
       </div>
 
       <div className="toolbar-divider" />
@@ -35,6 +37,38 @@ export default function Toolbar({ status, result, format, onFormatChange, onDown
             <option value="pdf">PDF</option>
             <option value="ps">PostScript</option>
           </select>
+        </label>
+
+        {/* Hidden file input — triggered by the open button */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".cyk"
+          style={{ display: 'none' }}
+          onChange={handleFileUpload}
+        />
+
+        {/* Open .cyk file */}
+        <button
+          className="btn"
+          onClick={() => fileInputRef.current?.click()}
+          title="Abrir un archivo .cyk desde el disco"
+        >
+          📂 Abrir .cyk
+        </button>
+
+        {/* Filename */}
+        <label className="toolbar-field">
+          <span>Nombre:</span>
+          <input
+            type="text"
+            className="toolbar-input sunken"
+            maxLength={50}
+            placeholder="documento"
+            value={filename}
+            onChange={e => setFilename(e.target.value)}
+            title="Nombre base para guardar / descargar archivos"
+          />
         </label>
 
         {/* Save source */}

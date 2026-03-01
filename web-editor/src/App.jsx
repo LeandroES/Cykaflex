@@ -22,6 +22,7 @@ fin{documento}
 
 export default function App() {
   const [source,      setSource]      = useState(INITIAL_SOURCE);
+  const [filename,    setFilename]    = useState('');
   const [format,      setFormat]      = useState('auto');
   const [splitPos,    setSplitPos]    = useState(50);   /* % */
   const [consoleOpen, setConsoleOpen] = useState(false);
@@ -63,40 +64,54 @@ export default function App() {
     document.addEventListener('mouseup',   onMouseUp);
   }, []);
 
+  /* ── File upload ────────────────────────────────────────────── */
+
+  const handleFileUpload = useCallback((event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    /* Reset immediately so the same file can be re-uploaded */
+    event.target.value = '';
+    setFilename(file.name.replace(/\.cyk$/i, ''));
+    const reader = new FileReader();
+    reader.onload = (e) => setSource(e.target.result);
+    reader.readAsText(file, 'utf-8');
+  }, []);
+
   /* ── Save source ────────────────────────────────────────────── */
 
   const handleSaveSource = useCallback(() => {
+    const name = `${filename.trim() || 'documento'}.cyk`;
     const blob = new Blob([source], { type: 'text/plain;charset=utf-8' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = 'documento.cyk';
+    a.download = name;
     a.click();
     URL.revokeObjectURL(url);
-  }, [source]);
+  }, [source, filename]);
 
   /* ── Download ───────────────────────────────────────────────── */
 
   const handleDownload = useCallback(() => {
     if (!result) return;
-
-    const a = document.createElement('a');
+    const base = filename.trim() || 'documento';
+    const a    = document.createElement('a');
 
     if (result.url) {
       /* PDF — already a Blob URL */
       a.href     = result.url;
-      a.download = 'documento.pdf';
+      a.download = `${base}.pdf`;
     } else if (result.psText) {
       /* PostScript — create Blob on the fly */
       const blob = new Blob([result.psText], { type: 'application/postscript' });
       a.href     = URL.createObjectURL(blob);
-      a.download = 'documento.ps';
+      a.download = `${base}.ps`;
     } else {
       return;
     }
 
     a.click();
-  }, [result]);
+  }, [result, filename]);
 
   /* ── Render ─────────────────────────────────────────────────── */
 
@@ -112,6 +127,9 @@ export default function App() {
         onDownload={handleDownload}
         onSaveSource={handleSaveSource}
         hasSource={source.trim().length > 0}
+        filename={filename}
+        setFilename={setFilename}
+        handleFileUpload={handleFileUpload}
       />
 
       {/* ── Split pane ──────────────────────────────────────── */}
